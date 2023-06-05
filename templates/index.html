@@ -1,0 +1,211 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- favicon-->
+    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+
+    <title>Interlude - Homepage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+</head>
+
+<body>
+
+            <header>
+                <div class="header_inner">
+                    <div class="left-side">
+                        <!-- Logo -->
+                        <div id="logo" class=" uk-hidden@s">
+                            <a href="home.html">
+                                <b><h1 style="text-transform: uppercase;">Interlude</h1></b>
+                            </a>
+                        </div>
+                        <a href="/">
+                            <b><h1 style="font-size: 1.5rem;">Interlude</h1></b>
+                         </a>
+
+                    </div>
+                    <div class="right-side lg:pr-4">
+                         <!-- upload -->
+                        <a href="#"
+                            class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                            <ion-icon name="add-circle" class="-mb-1
+                             mr-1 opacity-90 text-xl uilus-circle"></ion-icon> New Post ➕
+                        </a>
+                         <!-- upload dropdown box -->
+                        <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+    
+                            <!-- notivication header -->
+                            <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                                <h3>Make a post </h3>
+                            </div>
+    
+                            <!-- notification contents -->
+                                <div class="flex justify-center flex-center text-center">
+        
+                                    <div class="flex flex-col choose-upload text-center">
+
+                                        <form action="upload" method="POST" enctype="multipart/form-data" >
+                                            {% csrf_token %}
+                                            <p class="my-3 leading-6"> Upload pics</p>
+                                            <div>
+                                                <input type="file" name="image_upload">
+                                                <textarea class="button soft-warning small" name="caption" placeholder="caption..." ></textarea>
+                                                <br>
+                                                <button class="button bg-blue-700" type="submit" >Post</button>
+                                            </div>
+                                        </form>
+        
+                                    </div>
+        
+                                    <div class="uk-flex uk-flex-column choose-upload" hidden>
+                                        <div class="mx-auto flex flex-col h-24 items-center justify-center relative w-full rounded-lg">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                                <path fill-rule="evenodd" d="M2 9.5A3.5 3.5 0 005.5 13H9v2.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 15.586V13h2.5a4.5 4.5 0 10-.616-8.958 4.002 4.002 0 10-7.753 1.977A3.5 3.5 0 002 9.5zm9 3.5H9V8a1 1 0 012 0v5z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <p class="my-3 leading-6"> Import videos from YouTube <br> Copy / Paste your video link here </p>
+                                        <form class="uk-grid-small" uk-grid>
+                                            <div class="uk-width-expand">
+                                                <input type="text" class="uk-input uk-form-small  bg-gray-200 " style="box-shadow:none" placeholder="Paste link">
+                                            </div>
+                                            <div class="uk-width-auto"> <button type="submit" class="button soft-warning -ml-2">
+                                                    Import </button> </div>
+                                        </form>
+                                        <a href="#" class="uk-text-muted mt-3 uk-link"
+                                            uk-toggle="target: .choose-upload ; animation: uk-animation-slide-left-small, uk-animation-slide-right-medium; queued: true">
+                                            Or Upload Video </a>
+                                    </div>
+        
+                                </div>
+                            <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
+                                Your Image size Must be Maxmium 999MB
+                            </div>
+                        </div>
+                        
+                        <!-- profile -->
+
+                        <a href="#">
+                            <img src="{{user_profile.profileimg.url}}" class="header-avatar" alt="">
+                        </a>
+                        <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+                            <ul>
+                                <li><a href="/profile/{{user_profile.user.username}}"> My profile</a></li>
+                                <li><a href="/settings"> Account settings </a> </li>
+                                <li><a href="logout"> Log Out</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <div class="container m-auto">
+
+                <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5">
+
+                    <!-- left sidebar-->
+                    <div class="space-y-5 flex-shrink-0 lg:w-7/12">
+
+                        <!-- post 1-->
+
+                        {% for post in posts reversed %}
+                        <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
+    
+                            <!-- post header-->
+                            <div class="flex justify-between items-center px-4 py-3">
+                                <div class="flex flex-1 items-center space-x-4">
+                                    <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>
+                                </div>
+                              <div>
+                                <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
+                                <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
+                              
+                                    <ul class="space-y-1">
+                                      <li> 
+                                          <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
+                                           <i class="uil-trash-alt mr-1"></i>  Delete Post
+                                          </a> 
+                                      </li>
+                                    </ul>
+                                
+                                </div>
+                              </div>
+                            </div>
+    
+                            <div uk-lightbox>
+                                <a href="{{post.image.url}}">  
+                                    <img src="{{post.image.url}}" alt="">
+                                </a>
+                            </div>
+                            
+    
+                            <div class="py-3 px-4 space-y-3"> 
+                               
+                                <p>
+                                    <a href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
+                                </p>
+                                <hr>
+                                <div class="flex space-x-4 lg:font-bold">
+                                    <!-- like button -->
+                                    <a href="/like-post?post_id={{post.id}}" class="flex items-center space-x-2">
+                                        <div class="p-2 rounded-full text-black">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="">
+                                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                            </svg>
+                                            {% if post.no_of_likes == 0 %}
+                                            <p>No likes</p>
+                                            {% elif post.no_of_likes == 1 %}
+                                            <p>Liked by {{post.no_of_likes}} person</p>
+                                            {% else %}
+                                            <p>Liked by {{post.no_of_likes}} people</p>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                </div>
+    
+                            </div>
+    
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+
+                </div>               
+          
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+ <!-- Scripts
+    ================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script>
+    <script src="{% static 'assets/js/simplebar.js' %}"></script>
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+
+</body>
+
+
+</html>

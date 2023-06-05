@@ -1,0 +1,105 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- favicon-->
+    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <title>Log In - Interlude</title>
+
+    <!-- Add the MDB5 CSS file -->
+    <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
+</head>
+
+<body>
+    <!-- header-->
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">Interlude</a>
+              <form class="d-flex">
+                <a class="btn btn-dark" href="/signup" role="button">Register</a>
+              </form>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content-->
+    <section class="vh-100" style="background-color: #9568b3;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+              <div class="card" style="border-radius: 1rem;">
+                <div class="row g-0">
+                  <div class="col-md-6 col-lg-5 d-none d-md-block">
+                    <img src="{% static 'assets/images/loginimg.jpg' %}"
+                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                  </div>
+                  <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                    <div class="card-body p-4 p-lg-5 text-black">
+
+                        <div>
+                            <style>
+                                h5{
+                                    color: rgb(0, 0, 0);
+                                }
+                            </style>
+                            {% for message in messages %}
+                            <h5>{{message}}</h5>
+                            {% endfor %}
+                        </div>
+      
+                      <form action="" method="POST">
+                        {% csrf_token %}
+      
+                        <div class="d-flex align-items-center mb-3 pb-1">
+                          <span class="h1 fw-bold mb-0">Interlude</span>
+                        </div>
+      
+                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your account</h5>
+      
+                        <div class="form-outline mb-4">
+                          <input type="text" name="username" placeholder="Username" id="form2Example17" class="form-control form-control-lg" />
+                          <label class="form-label" for="form2Example17">Username</label>
+                        </div>
+      
+                        <div class="form-outline mb-4">
+                          <input type="password" name="password" placeholder="Password" id="form2Example27" class="form-control form-control-lg" />
+                          <label class="form-label" for="form2Example27">Password</label>
+                        </div>
+      
+                        <div class="pt-1 mb-4">
+                          <button type="submit" class="btn btn-dark btn-lg btn-block" type="button">Login</button>
+                        </div>
+      
+                        <p class="text-center text-muted mt-5 mb-0">Don't have an account? <a href="/signup"
+                            class="fw-bold text-body">Register here</a></p>
+                      </form>
+      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2023 Copyright By Interlude
+      </div>
+    </footer>
+
+    <!-- Add the MDB5 JS files -->
+    <script src="{% static 'mdb.min.js' %}"></script>
+</body>
+
+</html>

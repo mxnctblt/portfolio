@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- favicon-->
+    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <title>Log In - Interlude</title>
+
+    <!-- Add the MDB5 CSS file -->
+    <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
+</head>
+
+<body>
+    <!-- header-->
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">Interlude</a>
+              <form class="d-flex">
+                <a class="btn btn-dark" href="/logout" role="button">Log out</a>
+              </form>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content-->
+    <section class="vh-100" style="background-color: #9568b3;">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card" style="border-radius: 15px;">
+                    <div class="card-body p-5">
+                    <h2 class="text-uppercase text-center mb-5">Profile Settings for <b>{{user.username}}</b></h2>
+
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-outline mb-4">
+                        <input type="text" name="username" id="form3Example1cg" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example1cg">Username</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                        <input type="email" name="email" id="form3Example3cg" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example3cg">Email</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                        <input type="password" name="password" id="form3Example4cg" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example4cg">Password</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <label for="">Music</label>
+                            <input type="text" name="music" placeholder="The type of music you like..." value="{{user_profile.music}}" class="form-control form-control-lg" />
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-light btn-lg btn-block" type="button"><a href="/">Cancel</a></button>
+                        <button type="submit" class="btn btn-dark btn-lg btn-block" type="button">Save</button>
+                        </div>
+
+                    </form>
+
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+          © 2023 Copyright By Interlude
+        </div>
+    </footer>
+  
+    <!-- Add the MDB5 JS files -->
+    <script src="{% static 'mdb.min.js' %}"></script>
+</body>
+  
+</html>
