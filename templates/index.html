@@ -131,20 +131,22 @@
                                 <div class="flex flex-1 items-center space-x-4">
                                     <span class="block font-semibold "><a href="/profile/{{post.user}}">@{{post.user}}</a></span>
                                 </div>
+                              {% if post.user == user.username %}
                               <div>
-                                <a href="#"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
+                                <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 "></i> </a>
                                 <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100  " uk-drop="mode: hover;pos: top-right">
-                              
+
                                     <ul class="space-y-1">
-                                      <li> 
-                                          <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
-                                           <i class="uil-trash-alt mr-1"></i>  Delete Post
-                                          </a> 
-                                      </li>
+                                    <li> 
+                                        <a href="delete?post_id={{post.id}}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md ">
+                                            <button type="submit">Delete Post</button>
+                                        </a> 
+                                    </li>
                                     </ul>
-                                
+
                                 </div>
                               </div>
+                              {% endif %}
                             </div>
     
                             <div uk-lightbox>

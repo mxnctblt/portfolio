@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
 
 
@@ -184,3 +184,11 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+@login_required(login_url='login')
+def delete_post(request):
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+
+    post.delete()
+    return redirect('/')
