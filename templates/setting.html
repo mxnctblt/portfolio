@@ -54,14 +54,16 @@
                         </div>
 
                         <div class="form-outline mb-4">
-                            <input type="text" name="music" id="form3Example3cg" value="{{user_profile.music}}" class="form-control form-control-lg" />
+                            <textarea name="music" id="form3Example3cg" class="form-control form-control-lg">{{user_profile.music}}</textarea>
                             <label class="form-label" for="form3Example4cg">Music</label>
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <a class="btn btn-lg btn-outline-warning" data-mdb-ripple-color="dark" href="/profile/{{user_profile.user.username}}" role="button">Cancel</a>
                             <button type="submit" class="btn btn-dark btn-lg btn-block">Save</button>
                         </div>
+
+                        <p class="text-center text-muted mt-5 mb-0">Go to the Profile page, <a href="/profile/{{user_profile.user.username}}"
+                            class="fw-bold text-body"><u>here</u></a></p>
 
                     </form>
 
