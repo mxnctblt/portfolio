@@ -5,6 +5,7 @@ from django.contrib.auth.models import User, auth
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
+import re
 
 
 
@@ -21,15 +22,16 @@ def feed(request):
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
-        if request.FILES.get('image_upload') == None:
-                messages.info(request, 'Missing an image')
+        if request.POST['linkyt'] == None:
+                messages.info(request, 'Missing youtube link to song')
                 return redirect('/')
         else:
             user = request.user.username
-            image = request.FILES.get('image_upload')
+            linkyt = request.POST['linkyt']
+            linkyt = embed_url(linkyt)
             caption = request.POST['caption']
 
-            new_post = Post.objects.create(user=user, image=image, caption=caption)
+            new_post = Post.objects.create(user=user, linkyt=linkyt, caption=caption)
             new_post.save()
 
             return redirect('/')
@@ -196,3 +198,8 @@ def delete_post(request):
 
     post.delete()
     return redirect('/')
+
+def embed_url(video_url):
+        regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
+
+        return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)

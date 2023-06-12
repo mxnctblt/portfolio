@@ -34,7 +34,7 @@
                         <button type="button" class="btn btn-warning dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
                           Make a Post
                         </button>
-                        <div class="dropdown-menu p-3">
+                        <div class="dropdown-menu p-3" >
                             <div class="d-flex justify-content-center">
                                 <style>
                                     h5{
@@ -45,12 +45,15 @@
                                 <h5>{{message}}</h5>
                                 {% endfor %}
                             </div>
-                            <form action="upload" method="POST" enctype="multipart/form-data" >
+                            <form action="upload" method="POST">
                                 {% csrf_token %}
                                 <h3 class="d-flex justify-content-center">Make a Post</h3>
                                 <br>
                                 <div>
-                                    <input class="d-flex justify-content-center" type="file" name="image_upload">
+                                    <div class="form-outline mb-4 d-flex justify-content-center">
+                                        <textarea name="linkyt" id="form3Example4cg" class="form-control form-control-lg"></textarea>
+                                        <label class="form-label" for="form3Example4cg">Youtube Link</label>
+                                    </div>
                                     <br>
                                     <div class="form-outline mb-4 d-flex justify-content-center">
                                         <textarea name="caption" id="form3Example4cg" class="form-control form-control-lg"></textarea>
@@ -113,7 +116,7 @@
                         {% endif %}
                     </div>
                     <!-- post content -->
-                    <img src="{{post.image.url}}" class="img-fluid rounded" alt="post image">
+                    <iframe class="responsive-iframe" height="315" src="{{post.linkyt}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     <p class="pt-2" style="margin-bottom: 0;">
                         <a class="link-warning" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
                     </p>
@@ -133,6 +136,7 @@
                             {% endif %}
                         </div>
                     </a>
+                    <!-- post comments -->
 
                 </div>
                 {% endfor %}
