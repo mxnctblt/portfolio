@@ -25,7 +25,23 @@
             <div class="container-fluid">
                 
                 <!-- Left element -->
-                <a class="navbar-brand" href="/">Interlude</a>
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <form action="/search" method="POST" class="d-flex input-group w-auto">
+                        {% csrf_token %}
+                        <input
+                            type="search"
+                            name="username"
+                            class="form-control rounded me-2"
+                            placeholder="Search for username..."
+                            aria-label="Search"
+                            aria-describedby="search-addon"
+                        />
+                        <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
+                            <img src="{% static 'search-icon.png' %}" height="15" alt="search icon" loading="lazy" />
+                        </button>
+                    </form>
+                </div>
             
                 <!-- Right elements -->
                 <div class="d-flex align-items-center">

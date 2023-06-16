@@ -24,16 +24,15 @@
               <a class="navbar-brand" href="/">Interlude</a>
               <form class="d-flex">
                 <a class="btn btn-dark me-4" href="/logout" role="button">Log out</a>
+                {% if user_profile.user.username == user.username %}
                 <a class="btn btn-dark" href="/settings" role="button">Account Settings</a>
+                {% endif %}
               </form>
             </div>
         </nav>
     </header>
 
     <!-- Content-->
-    <!-- profile image -->
-
-    <!-- user_profile posts -->
     <div class="vh-auto" style="background-color: #76593b;">
         <div class="container-fluid p-5">
             <!-- img bio & music-->
@@ -104,24 +103,9 @@
                         <!-- post header left -->
                         <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
 
-                        <!-- post header right -->
-                        {% if post.user == user.username %}
-                        <div class="btn-group dropup">
-                            <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
-                                • • •
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li class="dropdown-item">
-                                <a href="delete?post_id={{post.id}}">
-                                    <button class="btn btn-outline-danger" type="submit"><h8>Delete Post</h8></button>
-                                </a> 
-                              </li>
-                            </ul>
-                          </div>
-                        {% endif %}
                     </div>
                     <!-- post content -->
-                    <img src="{{post.image.url}}" class="img-fluid rounded" alt="post image">
+                    <iframe class="responsive-iframe" height="315" src="{{post.linkyt}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     <p class="pt-2" style="margin-bottom: 0;">
                         <a class="link-warning" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
                     </p>
