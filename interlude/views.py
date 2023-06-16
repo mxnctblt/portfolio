@@ -3,8 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
+import re
 
 
 
@@ -21,14 +22,19 @@ def feed(request):
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
-        user = request.user.username
-        image = request.FILES.get('image_upload')
-        caption = request.POST['caption']
+        if request.POST['linkyt'] == None:
+                messages.info(request, 'Missing youtube link to song')
+                return redirect('/')
+        else:
+            user = request.user.username
+            linkyt = request.POST['linkyt']
+            linkyt = embed_url(linkyt)
+            caption = request.POST['caption']
 
-        new_post = Post.objects.create(user=user, image=image, caption=caption)
-        new_post.save()
+            new_post = Post.objects.create(user=user, linkyt=linkyt, caption=caption)
+            new_post.save()
 
-        return redirect('/')
+            return redirect('/')
     else:
         return redirect('/')
 
@@ -184,3 +190,38 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect('login')
+
+@login_required(login_url='login')
+def delete_post(request):
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+
+    post.delete()
+    return redirect('/')
+
+@login_required(login_url='login')
+def search(request):
+    user_object = User.objects.get(username=request.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        username_object = User.objects.filter(username__icontains=username)
+
+        username_profile = []
+        username_profile_list = []
+
+        for users in username_object:
+            username_profile.append(users.id)
+
+        for ids in username_profile:
+            profile_lists = Profile.objects.filter(id_user=ids)
+            username_profile_list.append(profile_lists)
+        
+        username_profile_list = list(chain(*username_profile_list))
+    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+
+def embed_url(video_url):
+        regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
+
+        return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)

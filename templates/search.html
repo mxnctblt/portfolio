@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- favicon-->
+    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <title>Search - Interlude</title>
+
+    <!-- Add the MDB5 CSS file -->
+    <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
+</head>
+
+<body>
+    <!-- header-->
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                
+                <!-- Left element -->
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <form action="/search" method="POST" class="d-flex input-group w-auto">
+                        {% csrf_token %}
+                        <input
+                            type="search"
+                            name="username"
+                            class="form-control rounded me-2"
+                            placeholder="Search for username..."
+                            aria-label="Search"
+                            aria-describedby="search-addon"
+                        />
+                        <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
+                            <img src="{% static 'search-icon.png' %}" height="15" alt="search icon" loading="lazy" />
+                        </button>
+                    </form>
+                </div>
+            
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+                    <div class="dropdown">
+                        <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                            <img src="{{user_profile.profileimg.url}}" class="rounded-circle shadow-4-strong" height="35" alt="profile picture" loading="lazy" />
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                            <li>
+                            <a class="dropdown-item" href="/profile/{{user_profile.user.username}}">My Profile</a>
+                            </li>
+                            <li>
+                            <a class="dropdown-item" href="/settings">Account Settings</a>
+                            </li>
+                            <li>
+                            <a class="dropdown-item" href="logout">Log out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content-->
+    <section class="vh-100" style="background-color: #76593b;">
+        <div class="container-fluid">
+            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
+                {% for users in username_profile_list %}
+                <a href="/profile/{{users.user}}" class="mb-4">
+                    <div class="card p-2">
+                        <div class="row d-flex">
+                            <div class="col-3">
+                                <img class="img-fluid rounded" style="width: 200px; height: 200px;" src="{{users.profileimg.url}}" alt="profileimg">
+                            </div>
+                            <div class="col-4 me-4" style="color: black;">
+                                <h2 class="pt-2"><b>@{{users.user}}</b></h2>
+                                <hr>
+                                <p>{{users.bio}}</p>
+                            </div>
+                            <div class="col-4 pt-4" style="color: black;">
+                                <h5>♫ My musical tastes ♫</h5>
+                                <hr>
+                                <p>-- {{users.music}} --</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2023 Copyright By Interlude
+        </div>
+    </footer>
+
+    <!-- Add the MDB5 JS files -->
+    <script src="{% static 'mdb.min.js' %}"></script>
+</body>
+
+</html>

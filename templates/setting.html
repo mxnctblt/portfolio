@@ -2,93 +2,89 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<head>
+    <meta charset="utf-8">
     <!-- favicon-->
     <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
     <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
     <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
     <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <title>Account Settings - Interlude</title>
 
-    <title>Profile Settings - Interlude</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
-
+    <!-- Add the MDB5 CSS file -->
+    <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
 </head>
 
 <body>
     <!-- header-->
-    <div class="bg-white py-4 shadow dark:bg-gray-800">
-        <div class="max-w-6xl mx-auto">
-
-            <div class="flex items-center lg:justify-between justify-around">
-
-                <a href="/">
-                    <b><h1 style="font-size: 1.5rem;">Interlude</h1></b>
-                </a>
-
-                <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">  
-                    <a href="/logout" class="bg-pink-500 pink-500 px-6 py-3 rounded-md shadow text-white">logout</a>
-                </div>
-
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">Interlude</a>
+              <form class="d-flex">
+                <a class="btn btn-dark" href="/logout" role="button">Log out</a>
+              </form>
             </div>
-        </div>
-    </div>
+        </nav>
+    </header>
+
     <!-- Content-->
-        <div class="container m-auto"> 
-            <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">Profile Settings for <b>{{user.username}}</b></h1>
-            <br>
-            <hr>
+    <section class="vh-auto" style="background-color: #76593b;">
+        <div class=" d-flex align-items-center h-100">
+            <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6 pb-5 pt-5">
+                <div class="card" style="border-radius: 15px;">
+                    <div class="card-body p-5">
+                    <h2 class="text-uppercase text-center mb-5">Profile Settings for<br><b class="text-lowercase">{{user.username}}</b></h2>
 
-            <div class="grid lg:grid-cols-3 mt-12 gap-8">
-                <h3 class="text-xl mb-2"> General</h3>
-            </div>
-            <br>
-            <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
-                <form action="" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
-                        <div class="col-span-2">
-                            <label for="">Profile Picture</label>
-                            <img width="100" height="100" src="{{user_profile.profileimg.url}}" />
-                            <input type="file" name="image" value="" class="shadow-none bg-gray-100">
-                        </div>
-                        <div class="col-span-2">
-                            <label for="about">Bio</label>  
-                            <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
-                        </div> 
-                        <div class="col-span-2">
-                            <label for="">Music</label>
-                            <input type="text" name="music" placeholder="The type of music you like..." value="{{user_profile.music}}" class="shadow-none bg-gray-100">
-                        </div>
-                    </div> 
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
-                        <button class="p-2 px-4 rounded bg-gray-50 text-red-500"><a href="/">Cancel</a></button>
-                        <button type="submit" class="button bg-blue-700"> Save </button>
+                        <div class="form-outline mb-4">
+                            <img width="100" height="100" class="mt-5" src="{{user_profile.profileimg.url}}" />
+                            <input type="file" name="image" id="form3Example3cg" class="form-control form-control-lg" />
+                            <label class="form-label" for="form3Example3cg">Profile Picture</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <textarea name="bio" id="form3Example4cg" class="form-control form-control-lg">{{user_profile.bio}}</textarea>
+                            <label class="form-label" for="form3Example4cg">Bio</label>
+                        </div>
+
+                        <div class="form-outline mb-4">
+                            <textarea name="music" id="form3Example3cg" class="form-control form-control-lg">{{user_profile.music}}</textarea>
+                            <label class="form-label" for="form3Example4cg">Music</label>
+                        </div>
+
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn btn-dark btn-lg btn-block">Save</button>
+                        </div>
+
+                        <p class="text-center text-muted mt-5 mb-0">Go to the Profile page, <a href="/profile/{{user_profile.user.username}}"
+                            class="fw-bold text-body"><u>here</u></a></p>
+
+                    </form>
+
                     </div>
-                </form>
+                </div>
+                </div>
             </div>
-            <br>
+            </div>
         </div>
-    </div>
+    </section>
 
-
- <!-- Scripts
-    ================================================== -->
-    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>  
-    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'assets/js/uikit.js' %}"></script>
-    <script src="{% static 'assets/js/simplebar.js' %}"></script>
-    <script src="{% static 'assets/js/custom.js' %}"></script>
-
-
+    <!-- Footer -->
+    <footer>
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+          © 2023 Copyright By Interlude
+        </div>
+    </footer>
+  
+    <!-- Add the MDB5 JS files -->
+    <script src="{% static 'mdb.min.js' %}"></script>
 </body>
-
+  
 </html>

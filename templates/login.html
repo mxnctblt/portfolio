@@ -19,18 +19,18 @@
 <body>
     <!-- header-->
     <header>
-        <nav class="navbar navbar-light bg-light">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="/">Interlude</a>
-              <form class="d-flex">
-                <a class="btn btn-dark" href="/signup" role="button">Register</a>
-              </form>
-            </div>
-        </nav>
+      <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="/login">Interlude</a>
+            <form class="d-flex">
+              <a class="btn btn-dark" href="/signup" role="button">Register</a>
+            </form>
+          </div>
+      </nav>
     </header>
 
     <!-- Content-->
-    <section class="vh-100" style="background-color: #9568b3;">
+    <section class="vh-auto" style="background-color: #76593b;">
         <div class="container py-5 h-100">
           <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col col-xl-10">
@@ -38,7 +38,7 @@
                 <div class="row g-0">
                   <div class="col-md-6 col-lg-5 d-none d-md-block">
                     <img src="{% static 'assets/images/loginimg.jpg' %}"
-                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                    alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
                   </div>
                   <div class="col-md-6 col-lg-7 d-flex align-items-center">
                     <div class="card-body p-4 p-lg-5 text-black">
@@ -74,11 +74,11 @@
                         </div>
       
                         <div class="pt-1 mb-4">
-                          <button type="submit" class="btn btn-dark btn-lg btn-block" type="button">Login</button>
+                          <button type="submit" class="btn btn-dark btn-lg btn-block">Login</button>
                         </div>
       
                         <p class="text-center text-muted mt-5 mb-0">Don't have an account? <a href="/signup"
-                            class="fw-bold text-body">Register here</a></p>
+                            class="fw-bold text-body"><u>Register here</u></a></p>
                       </form>
       
                     </div>
