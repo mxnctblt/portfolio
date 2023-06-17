@@ -15,9 +15,23 @@ def feed(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
 
-    posts = Post.objects.all()
+    user_following_list = []
+    feed = []
 
-    return render(request, 'index.html', {'user_profile': user_profile, 'posts': posts})
+    user_following = FollowersCount.objects.filter(follower=request.user.username)
+
+    user_following_list.append(request.user)
+
+    for users in user_following:
+        user_following_list.append(users.user)
+
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user=usernames)
+        feed.append(feed_lists)
+
+    feed_list = list(chain(*feed))
+
+    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list})
 
 @login_required(login_url='login')
 def upload(request):

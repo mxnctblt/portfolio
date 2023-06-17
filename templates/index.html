@@ -108,7 +108,7 @@
         <div class="container-fluid">
             <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
                 <!-- post -->
-                {% for post in posts reversed %}
+                {% for post in posts|dictsort:"created_at" reversed %}
                 <div class="card m-4 vh-auto col-5 p-2 d-flex">
                     <!-- post header -->
                     <div class="d-flex justify-content-between pb-2">
@@ -153,6 +153,9 @@
                         </div>
                     </a>
                     <!-- post comments -->
+                    <hr>
+                    <p>Created at: {{post.created_at}}</p>
+                    <hr>
 
                 </div>
                 {% endfor %}
