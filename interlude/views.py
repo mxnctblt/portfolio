@@ -41,11 +41,13 @@ def upload(request):
                 return redirect('/')
         else:
             user = request.user.username
+            user_profile = Profile.objects.get(user=request.user.id)
+            userpp = user_profile.profileimg
             linkyt = request.POST['linkyt']
             linkyt = embed_url(linkyt)
             caption = request.POST['caption']
 
-            new_post = Post.objects.create(user=user, linkyt=linkyt, caption=caption)
+            new_post = Post.objects.create(user=user, userpp=userpp, linkyt=linkyt, caption=caption)
             new_post.save()
 
             return redirect('/')

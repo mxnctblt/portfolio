@@ -50,7 +50,7 @@
                         <button type="button" class="btn btn-warning dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
                           Make a Post
                         </button>
-                        <div class="dropdown-menu p-3" >
+                        <div class="dropdown-menu p-3" style="width: 432px;" >
                             <div class="d-flex justify-content-center">
                                 <style>
                                     h5{
@@ -64,7 +64,7 @@
                             <form action="upload" method="POST">
                                 {% csrf_token %}
                                 <h3 class="d-flex justify-content-center">Make a Post</h3>
-                                <br>
+                                <hr>
                                 <div>
                                     <div class="form-outline mb-4 d-flex justify-content-center">
                                         <textarea name="linkyt" id="form3Example4cg" class="form-control form-control-lg"></textarea>
@@ -76,7 +76,7 @@
                                         <label class="form-label" for="form3Example4cg">Caption</label>
                                     </div>
                                     <br>
-                                    <button class="d-flex justify-content-center btn btn-dark" type="submit" >Post</button>
+                                    <button class="d-flex justify-content-center btn btn-dark btn-lg btn-block" type="submit" >Post</button>
                                 </div>
                             </form>
                         </div>
@@ -113,7 +113,10 @@
                     <!-- post header -->
                     <div class="d-flex justify-content-between pb-2">
                         <!-- post header left -->
-                        <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
+                        <div>
+                            <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong" height="35" alt="profile picture" loading="lazy" />
+                            <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
+                        </div>
 
                         <!-- post header right -->
                         {% if post.user == user.username %}
@@ -171,7 +174,7 @@
                     <hr>
                     <!-- post creation date -->
                     <div class="d-flex justify-content-end">
-                        <p style="margin-bottom: 0px;">posted {{post.created_at|timesince}} ago</p>
+                        <p style="margin-bottom: 0px;">Posted {{ post.created_at }}</p>
                     </div>
 
                 </div>
