@@ -154,8 +154,25 @@
                     </a>
                     <!-- post comments -->
                     <hr>
-                    <p>Created at: {{post.created_at}}</p>
+                    <form action="/search" method="POST" class="d-flex input-group w-auto">
+                        {% csrf_token %}
+                        <input
+                            type="search"
+                            name="username"
+                            class="form-control rounded me-2"
+                            placeholder="Leave a comment..."
+                            aria-label="Search"
+                            aria-describedby="search-addon"
+                        />
+                        <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
+                            <img src="{% static 'comment-icon.png' %}" height="20" alt="search icon" loading="lazy" />
+                        </button>
+                    </form>
                     <hr>
+                    <!-- post creation date -->
+                    <div class="d-flex justify-content-end">
+                        <p style="margin-bottom: 0px;">posted {{post.created_at|timesince}} ago</p>
+                    </div>
 
                 </div>
                 {% endfor %}
