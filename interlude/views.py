@@ -1,4 +1,4 @@
-from .models import FollowersCount, LikePost, Post, Profile
+from .models import FollowersCount, LikePost, Post, Profile, Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
@@ -31,7 +31,7 @@ def feed(request):
 
     feed_list = list(chain(*feed))
 
-    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list})
+    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,})
 
 @login_required(login_url='login')
 def upload(request):
@@ -56,6 +56,7 @@ def upload(request):
 
 @login_required(login_url='signin')
 def like_post(request):
+    referer = request.META.get('HTTP_REFERER')
     username = request.user.username
     post_id = request.GET.get('post_id')
 
@@ -68,12 +69,32 @@ def like_post(request):
         new_like.save()
         post.no_of_likes = post.no_of_likes+1
         post.save()
-        return redirect('/')
+        return redirect(referer)
     else:
         like_filter.delete()
         post.no_of_likes = post.no_of_likes-1
         post.save()
-        return redirect('/')
+        return redirect(referer)
+
+@login_required(login_url='signin')
+def comment_post(request):
+    referer = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        user = request.user.username
+        user_profile = Profile.objects.get(user=request.user.id)
+        userpp = user_profile.profileimg
+        post_id = request.GET.get('post_id')
+        content = request.POST['comment']
+
+        post = Post.objects.get(id=post_id)
+
+        comment = Comment.objects.create(post_id=post_id, user=user, userpp=userpp, content=content)
+        comment.save()
+        post.comments.add(comment)
+        post.save()
+        return redirect(referer)
+    else:
+        return redirect(referer)
 
 @login_required(login_url='signin')
 def profile(request, pk):
@@ -209,11 +230,39 @@ def logout(request):
 
 @login_required(login_url='login')
 def delete_post(request):
+    referer = request.META.get('HTTP_REFERER')
     post_id = request.GET.get('post_id')
     post = get_object_or_404(Post, id=post_id, user=request.user)
 
     post.delete()
-    return redirect('/')
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_comment(request):
+    referer = request.META.get('HTTP_REFERER')
+    id = request.GET.get('id')
+    comment = get_object_or_404(Comment, id=id, user=request.user)
+
+    comment.delete()
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_post_profile(request):
+    referer = request.META.get('HTTP_REFERER')
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+
+    post.delete()
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_comment_profile(request):
+    referer = request.META.get('HTTP_REFERER')
+    id = request.GET.get('id')
+    comment = get_object_or_404(Comment, id=id, user=request.user)
+
+    comment.delete()
+    return redirect(referer)
 
 @login_required(login_url='login')
 def search(request):

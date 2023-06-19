@@ -26,6 +26,7 @@ class Post(models.Model):
     caption = models.TextField()
     created_at = models.DateTimeField(default=datetime.now)
     no_of_likes = models.IntegerField(default=0)
+    comments = models.ManyToManyField('Comment', related_name='post_comments', blank=True)
 
     def __str__(self):
         return self.user
@@ -36,7 +37,18 @@ class LikePost(models.Model):
 
     def __str__(self):
         return self.username
-    
+
+class Comment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.CharField(max_length=100)
+    userpp = models.ImageField(upload_to='profile_images', default='blank-profile-picture.png')
+    content = models.TextField()
+    created_at = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return self.user
+
 class FollowersCount(models.Model):
     follower = models.CharField(max_length=100)
     user = models.CharField(max_length=100)

@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 
-                <!-- follow and posts -->
+                <!-- follow -->
                 <div class="card mt-2 p-2">
                     <form action="/follow" method="POST">
                         {% csrf_token %}
@@ -106,6 +106,21 @@
                                 <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong" height="35" alt="profile picture" loading="lazy" />
                                 <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
                             </div>
+                            <!-- post header right -->
+                            {% if post.user == user.username %}
+                            <div class="btn-group dropup">
+                                <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
+                                    • • •
+                                </button>
+                                <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a href="/delete?post_id={{post.id}}">
+                                        <button class="btn btn-outline-danger" type="submit"><h8>Delete Post</h8></button>
+                                    </a> 
+                                </li>
+                                </ul>
+                            </div>
+                            {% endif %}
                         </div>
                         <!-- post content -->
                         <iframe class="responsive-iframe" height="315" src="{{post.linkyt}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -128,7 +143,49 @@
                                 {% endif %}
                             </div>
                         </a>
-
+                        <!-- post comments -->
+                        <hr>
+                        <form action="/comment-post?post_id={{post.id}}" method="POST" class="d-flex input-group w-auto">
+                            {% csrf_token %}
+                            <input
+                                type="search"
+                                name="comment"
+                                class="form-control rounded me-2"
+                                placeholder="Leave a comment..."
+                                aria-label="Search"
+                                aria-describedby="search-addon"
+                            />
+                            <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
+                                <img src="{% static 'comment-icon.png' %}" height="20" alt="comment icon" loading="lazy" />
+                            </button>
+                        </form>
+                        {% for comment in post.comments.all|dictsort:"created_at" reversed %}
+                            <div class="d-flex justify-content-between align-items-center p-1">
+                                <div>
+                                    <img src="{{comment.userpp.url}}" class="rounded-circle shadow-4-strong" height="30" alt="profile picture" loading="lazy" />
+                                    <a class="pt-2 pb-2" style="color: #be7200;" href="/profile/{{comment.user}}"><strong>{{comment.user}}</strong></a> {{comment.content}}
+                                </div>
+                                {% if comment.user == user.username %}
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
+                                        • • •
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li class="dropdown-item">
+                                        <a href="/delete-comment?id={{comment.id}}">
+                                            <button class="btn btn-outline-danger" type="submit"><h8>Delete Comment</h8></button>
+                                        </a> 
+                                      </li>
+                                    </ul>
+                                  </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <hr>
+                        <!-- post creation date -->
+                        <div class="d-flex justify-content-end">
+                            <p style="margin-bottom: 0px;">Posted {{ post.created_at }}</p>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
