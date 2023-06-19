@@ -33,104 +33,108 @@
     </header>
 
     <!-- Content-->
-    <div class="vh-auto" style="background-color: #76593b;">
-        <div class="container-fluid p-5">
-            <!-- img bio & music-->
-            <div class="card p-2">
-                <div class="row d-flex">
-                    <div class="col-3">
-                        <img class="img-fluid rounded" style="width: 200px; height: 200px;" src="{{user_profile.profileimg.url}}" alt="profileimg">
-                    </div>
-                    <div class="col-4 me-4" style="color: black;">
-                        <h2 class="pt-2"><b>@{{user_profile.user.username}}</b></h2>
-                        <hr>
-                        <p>{{user_profile.bio}}</p>
-                    </div>
-                    <div class="col-4 pt-4" style="color: black;">
-                        <h5>♫ My musical tastes ♫</h5>
-                        <hr>
-                        <p>-- {{user_profile.music}} --</p>
+    <div class="vh-auto min-vh-100" style="background-color: #76593b;">
+        <div class="vh-auto" style="background-color: #76593b;">
+            <div class="container-fluid p-5">
+                <!-- img bio & music-->
+                <div class="card p-2">
+                    <div class="row d-flex">
+                        <div class="col-3">
+                            <img class="img-fluid rounded" style="width: 200px; height: 200px;" src="{{user_profile.profileimg.url}}" alt="profileimg">
+                        </div>
+                        <div class="col-4 me-4" style="color: black;">
+                            <h2 class="pt-2"><b>@{{user_profile.user.username}}</b></h2>
+                            <hr>
+                            <p>{{user_profile.bio}}</p>
+                        </div>
+                        <div class="col-4 pt-4" style="color: black;">
+                            <h5>♫ My musical tastes ♫</h5>
+                            <hr>
+                            <p>-- {{user_profile.music}} --</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- follow and posts -->
-            <div class="card mt-2 p-2">
-                <form action="/follow" method="POST">
-                    {% csrf_token %}
-                    <!-- elements -->
-                    <div class="row d-flex align-items-center justify-content-center">
-                        <div class="col-2">
-                            {% if user_post_length == 0 %}
-                            <h5 class="pt-2" style="color: black;">no post</h5>
-                            {% elif user_post_length == 1 %}
-                            <h5 class="pt-2" style="color: black;">1 post</h5>
-                            {% else %}
-                            <h5 class="pt-2" style="color: black;">{{user_post_length}} posts</h5>
-                            {% endif %}
+                
+                <!-- follow and posts -->
+                <div class="card mt-2 p-2">
+                    <form action="/follow" method="POST">
+                        {% csrf_token %}
+                        <!-- elements -->
+                        <div class="row d-flex align-items-center justify-content-center">
+                            <div class="col-2">
+                                {% if user_post_length == 0 %}
+                                <h5 class="pt-2" style="color: black;">no post</h5>
+                                {% elif user_post_length == 1 %}
+                                <h5 class="pt-2" style="color: black;">1 post</h5>
+                                {% else %}
+                                <h5 class="pt-2" style="color: black;">{{user_post_length}} posts</h5>
+                                {% endif %}
+                            </div>
+                            <div class="col-2">
+                                {% if user_followers == 0 or user_followers == 1 %}
+                                <h5 class="pt-2" style="color: black;">{{user_followers}} follower</h5>
+                                {% else %}
+                                <h5 class="pt-2" style="color: black;">{{user_followers}} followers</h5>
+                                {% endif %}
+                            </div>
+                            <div class="col-2">
+                                <h5 class="pt-2" style="color: black;">{{user_following}} following</h5>
+                            </div>
+                            <div class="col-2">
+                                <input type="hidden" value="{{user.username}}" name="follower" />
+                                <input type="hidden" value="{{user_object.username}}" name="user" />
+                                {% if user_object.username != user.username %}
+                                <a data-ripple=""><button type="submit" class="btn btn-warning">{{button_text}}</button></a>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="col-2">
-                            {% if user_followers == 0 or user_followers == 1 %}
-                            <h5 class="pt-2" style="color: black;">{{user_followers}} follower</h5>
-                            {% else %}
-                            <h5 class="pt-2" style="color: black;">{{user_followers}} followers</h5>
-                            {% endif %}
-                        </div>
-                        <div class="col-2">
-                            <h5 class="pt-2" style="color: black;">{{user_following}} following</h5>
-                        </div>
-                        <div class="col-2">
-                            <input type="hidden" value="{{user.username}}" name="follower" />
-					        <input type="hidden" value="{{user_object.username}}" name="user" />
-                            {% if user_object.username != user.username %}
-                            <a data-ripple=""><button type="submit" class="btn btn-warning">{{button_text}}</button></a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>        
-
-    <section class="vh-auto" style="background-color: #76593b;">
-        <div class="container-fluid">
-            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
-                <!-- post -->
-                {% for post in user_posts reversed %}
-                <div class="card m-4 vh-auto col-5 p-2 d-flex">
-                    <!-- post header -->
-                    <div class="d-flex justify-content-between pb-2">
-                        <!-- post header left -->
-                        <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
-
-                    </div>
-                    <!-- post content -->
-                    <iframe class="responsive-iframe" height="315" src="{{post.linkyt}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-                    <p class="pt-2" style="margin-bottom: 0;">
-                        <a class="link-warning" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
-                    </p>
-                    <hr>
-                    <!-- post likes -->
-                    <a href="/like-post?post_id={{post.id}}" class="d-flex align-items-center">
-                        <div class="p-1 rounded-full text-black" style="flex-direction: row;display: flex;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" style="margin-right: 7px;">
-                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                            </svg>
-                            {% if post.no_of_likes == 0 %}
-                            <p class="fw-bolder" style="margin-bottom: 0;">0 like</p>
-                            {% elif post.no_of_likes == 1 %}
-                            <p class="fw-bolder" style="margin-bottom: 0;">{{post.no_of_likes}} like</p>
-                            {% else %}
-                            <p class="fw-bolder" style="margin-bottom: 0;">{{post.no_of_likes}} likes</p>
-                            {% endif %}
-                        </div>
-                    </a>
-
+                    </form>
                 </div>
-                {% endfor %}
             </div>
-        </div>
-    </section>
+        </div>        
+
+        <section class="vh-auto" style="background-color: #76593b;">
+            <div class="container-fluid">
+                <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
+                    <!-- post -->
+                    {% for post in user_posts reversed %}
+                    <div class="card m-4 vh-auto col-5 p-2 d-flex">
+                        <!-- post header -->
+                        <div class="d-flex justify-content-between pb-2">
+                            <!-- post header left -->
+                            <div>
+                                <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong" height="35" alt="profile picture" loading="lazy" />
+                                <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
+                            </div>
+                        </div>
+                        <!-- post content -->
+                        <iframe class="responsive-iframe" height="315" src="{{post.linkyt}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <p class="pt-2" style="margin-bottom: 0;">
+                            <a class="link-warning" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
+                        </p>
+                        <hr>
+                        <!-- post likes -->
+                        <a href="/like-post?post_id={{post.id}}" class="d-flex align-items-center">
+                            <div class="p-1 rounded-full text-black" style="flex-direction: row;display: flex;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" style="margin-right: 7px;">
+                                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                </svg>
+                                {% if post.no_of_likes == 0 %}
+                                <p class="fw-bolder" style="margin-bottom: 0;">0 like</p>
+                                {% elif post.no_of_likes == 1 %}
+                                <p class="fw-bolder" style="margin-bottom: 0;">{{post.no_of_likes}} like</p>
+                                {% else %}
+                                <p class="fw-bolder" style="margin-bottom: 0;">{{post.no_of_likes}} likes</p>
+                                {% endif %}
+                            </div>
+                        </a>
+
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Footer -->
     <footer>
