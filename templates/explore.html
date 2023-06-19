@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <!-- favicon-->
+    <link href="{% static 'apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <title>Feed - Interlude</title>
+
+    <!-- Add the MDB5 CSS file -->
+    <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
+</head>
+
+<body>
+    <!-- header-->
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <!-- Container wrapper -->
+            <div class="container-fluid">
+                
+                <!-- Left elements -->
+                <div class="d-flex align-items-center">
+                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                </div>
+            
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <a class="btn btn-warning me-4" href="#" role="button">About</a>
+                    <a class="btn btn-dark me-4" href="/login" role="button">Log In</a>
+                    <a class="btn btn-dark" href="/signup" role="button">Register</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content-->
+    <section class="vh-auto min-vh-100" style="background-color: #76593b;">
+        <div class="container-fluid">
+            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
+                <!-- post -->
+                {% for post in posts|dictsort:"created_at" reversed %}
+                <div class="card m-4 vh-auto col-5 p-2 d-flex">
+                    <!-- post header -->
+                    <div class="d-flex justify-content-between pb-2">
+                        <!-- post header left -->
+                        <div>
+                            <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong ms-1 me-1" height="35" alt="profile picture" loading="lazy" />
+                            <a class="link-dark pt-2 pb-2" href="#"><b>@{{post.user}}</b></a>
+                        </div>
+                    </div>
+                    
+                    <!-- post content -->
+                    <iframe class="responsive-iframe" height="315" 
+                            src="{{post.linkyt}}" title="YouTube video player" frameborder="0"
+                            style="border-radius: 10px; overflow: hidden;"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                    </iframe>
+                    <div class="d-flex justify-content-between pt-2">
+                        <!-- post caption -->
+                        <p class="pt-2" style="margin-bottom: 0;">
+                            <a class="link-warning ms-1" href="#"><strong>{{post.user}}</strong></a> {{post.caption}}
+                        </p>
+                        <!-- post likes -->
+                        <div class="p-1 rounded-full text-black" style="flex-direction: row;display: flex;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="pt-2" width="25" height="25" style="margin-right: 7px;">
+                                <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            {% if post.no_of_likes == 0 %}
+                            <p class="fw-bolder pt-1" style="margin-bottom: 0;">0 like</p>
+                            {% elif post.no_of_likes == 1 %}
+                            <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} like</p>
+                            {% else %}
+                            <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} likes</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- post comments -->
+                    <hr>
+                    {% for comment in post.comments.all|dictsort:"created_at" reversed %}
+                        <div class="d-flex justify-content-between align-items-center p-1">
+                            <div>
+                                <img src="{{comment.userpp.url}}" class="rounded-circle shadow-4-strong" height="30" alt="profile picture" loading="lazy" />
+                                <a class="pt-2 pb-2" style="color: #be7200;" href="#"><strong>{{comment.user}}</strong></a> {{comment.content}}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                    <!-- post creation date -->
+                    <div class="d-flex justify-content-end">
+                        <p style="margin-bottom: 0px;">Posted {{ post.created_at }}</p>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Copyright -->
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2023 Copyright By Interlude
+        </div>
+    </footer>
+
+    <!-- Add the MDB5 JS files -->
+    <script src="{% static 'mdb.min.js' %}"></script>
+</body>
+
+</html>

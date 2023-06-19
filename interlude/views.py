@@ -33,6 +33,10 @@ def feed(request):
 
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,})
 
+def explore(request):
+    posts = Post.objects.all()
+    return render(request, 'explore.html', {'posts': posts})
+
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
