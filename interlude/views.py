@@ -34,8 +34,14 @@ def feed(request):
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,})
 
 def explore(request):
-    posts = Post.objects.all()
-    return render(request, 'explore.html', {'posts': posts})
+    if request.user.is_authenticated:
+        user_object = User.objects.get(username=request.user.username)
+        user_profile = Profile.objects.get(user=user_object)
+        posts = Post.objects.all()
+        return render(request, 'explore.html', {'user_profile': user_profile, 'posts': posts})
+    else:
+        posts = Post.objects.all()
+        return render(request, 'feedpreview.html', {'posts': posts})
 
 @login_required(login_url='login')
 def upload(request):

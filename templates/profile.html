@@ -39,6 +39,7 @@
                     </form>
                 </div>
                 <form class="d-flex">
+                    <a class="btn btn-warning me-4" href="/explore" role="button">Explore All</a>
                     <a class="btn btn-dark me-4" href="/logout" role="button">Log out</a>
                     {% if user_profile.user.username == user.username %}
                     <a class="btn btn-dark" href="/settings" role="button">Account Settings</a>
