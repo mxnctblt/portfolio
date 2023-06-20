@@ -14,9 +14,20 @@ import re
 def feed(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+    user_music = user_profile.music
+    user_hashtags = extract_hashtags(user_music)
 
     user_following_list = []
-    feed = []
+    feed = set()
+
+    all_posts = Post.objects.all()
+
+    for post in all_posts:
+        post_hashtags = extract_hashtags(post.caption)
+        common_hashtags = set(user_hashtags) & set(post_hashtags)
+
+        if common_hashtags:
+            feed.add(post)
 
     user_following = FollowersCount.objects.filter(follower=request.user.username)
 
@@ -27,11 +38,9 @@ def feed(request):
 
     for usernames in user_following_list:
         feed_lists = Post.objects.filter(user=usernames)
-        feed.append(feed_lists)
+        feed.update(feed_lists)
 
-    feed_list = list(chain(*feed))
-
-    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed_list,})
+    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed,})
 
 def explore(request):
     if request.user.is_authenticated:
@@ -300,3 +309,8 @@ def embed_url(video_url):
         regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
 
         return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)
+
+def extract_hashtags(text):
+    hashtag_pattern = re.compile(r'\#\w+')
+    hashtags = re.findall(hashtag_pattern, text)
+    return hashtags
