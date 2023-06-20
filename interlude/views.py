@@ -14,6 +14,7 @@ import re
 def feed(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+
     user_music = user_profile.music
     user_hashtags = extract_hashtags(user_music)
 
@@ -73,7 +74,7 @@ def upload(request):
     else:
         return redirect('/')
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def like_post(request):
     referer = request.META.get('HTTP_REFERER')
     username = request.user.username
@@ -95,7 +96,7 @@ def like_post(request):
         post.save()
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def comment_post(request):
     referer = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
@@ -115,7 +116,7 @@ def comment_post(request):
     else:
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def profile(request, pk):
     user_object = User.objects.get(username=pk)
     user_profile = Profile.objects.get(user=user_object)
@@ -144,7 +145,7 @@ def profile(request, pk):
     }
     return render(request, 'profile.html', context)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def follow(request):
     if request.method == 'POST':
         follower = request.POST['follower']
