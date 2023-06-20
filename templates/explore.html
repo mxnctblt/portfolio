@@ -10,7 +10,7 @@
     <link href="{% static 'favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
     <link href="{% static 'favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
     <link rel="manifest" href="{% static 'site.webmanifest' %}">
-    <title>Feed - Interlude</title>
+    <title>Explore All - Interlude</title>
 
     <!-- Add the MDB5 CSS file -->
     <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
@@ -45,43 +45,6 @@
             
                 <!-- Right elements -->
                 <div class="d-flex align-items-center">
-                    <!-- Make post -->
-                    <div class="btn-group dropstart me-4">
-                        <button type="button" class="btn btn-warning dropdown-toggle" data-mdb-toggle="dropdown" aria-expanded="false">
-                          Make a Post
-                        </button>
-                        <div class="dropdown-menu p-3" style="width: 432px;" >
-                            <div class="d-flex justify-content-center">
-                                <style>
-                                    h5{
-                                        color: rgb(0, 0, 0);
-                                    }
-                                </style>
-                                {% for message in messages %}
-                                <h5>{{message}}</h5>
-                                {% endfor %}
-                            </div>
-                            <form action="upload" method="POST">
-                                {% csrf_token %}
-                                <h3 class="d-flex justify-content-center">Make a Post</h3>
-                                <hr>
-                                <div>
-                                    <div class="form-outline mb-4 d-flex justify-content-center">
-                                        <textarea name="linkyt" id="form3Example4cg" class="form-control form-control-lg"></textarea>
-                                        <label class="form-label" for="form3Example4cg">Youtube Link</label>
-                                    </div>
-                                    <br>
-                                    <div class="form-outline mb-4 d-flex justify-content-center">
-                                        <textarea name="caption" id="form3Example4cg" class="form-control form-control-lg"></textarea>
-                                        <label class="form-label" for="form3Example4cg">Caption</label>
-                                    </div>
-                                    <br>
-                                    <button class="d-flex justify-content-center btn btn-dark btn-lg btn-block" type="submit" >Post</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <a class="btn btn-warning me-4" href="/explore" role="button">Explore All</a>
                     <!-- Avatar -->
                     <div class="dropdown">
                         <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
@@ -106,8 +69,13 @@
 
     <!-- Content-->
     <section class="vh-auto min-vh-100" style="background-color: #76593b;">
+        <div class="container-fluid p-5 pb-0">
+            <div class="card p-2">
+                <p>Here you can see all the posts starting by the most recent</p>
+            </div>
+        </div>
         <div class="container-fluid">
-            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
+            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto">
                 <!-- post -->
                 {% for post in posts|dictsort:"created_at" reversed %}
                 <div class="card m-4 vh-auto col-5 p-2 d-flex">

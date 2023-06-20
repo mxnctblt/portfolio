@@ -1,4 +1,4 @@
-from .models import FollowersCount, LikePost, Post, Profile
+from .models import FollowersCount, LikePost, Post, Profile, Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
@@ -14,10 +14,43 @@ import re
 def feed(request):
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
+    user_music = user_profile.music
+    user_hashtags = extract_hashtags(user_music)
 
-    posts = Post.objects.all()
+    user_following_list = []
+    feed = set()
 
-    return render(request, 'index.html', {'user_profile': user_profile, 'posts': posts})
+    all_posts = Post.objects.all()
+
+    for post in all_posts:
+        post_hashtags = extract_hashtags(post.caption)
+        common_hashtags = set(user_hashtags) & set(post_hashtags)
+
+        if common_hashtags:
+            feed.add(post)
+
+    user_following = FollowersCount.objects.filter(follower=request.user.username)
+
+    user_following_list.append(request.user)
+
+    for users in user_following:
+        user_following_list.append(users.user)
+
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user=usernames)
+        feed.update(feed_lists)
+
+    return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed,})
+
+def explore(request):
+    if request.user.is_authenticated:
+        user_object = User.objects.get(username=request.user.username)
+        user_profile = Profile.objects.get(user=user_object)
+        posts = Post.objects.all()
+        return render(request, 'explore.html', {'user_profile': user_profile, 'posts': posts})
+    else:
+        posts = Post.objects.all()
+        return render(request, 'feedpreview.html', {'posts': posts})
 
 @login_required(login_url='login')
 def upload(request):
@@ -27,11 +60,13 @@ def upload(request):
                 return redirect('/')
         else:
             user = request.user.username
+            user_profile = Profile.objects.get(user=request.user.id)
+            userpp = user_profile.profileimg
             linkyt = request.POST['linkyt']
             linkyt = embed_url(linkyt)
             caption = request.POST['caption']
 
-            new_post = Post.objects.create(user=user, linkyt=linkyt, caption=caption)
+            new_post = Post.objects.create(user=user, userpp=userpp, linkyt=linkyt, caption=caption)
             new_post.save()
 
             return redirect('/')
@@ -40,6 +75,7 @@ def upload(request):
 
 @login_required(login_url='signin')
 def like_post(request):
+    referer = request.META.get('HTTP_REFERER')
     username = request.user.username
     post_id = request.GET.get('post_id')
 
@@ -52,12 +88,32 @@ def like_post(request):
         new_like.save()
         post.no_of_likes = post.no_of_likes+1
         post.save()
-        return redirect('/')
+        return redirect(referer)
     else:
         like_filter.delete()
         post.no_of_likes = post.no_of_likes-1
         post.save()
-        return redirect('/')
+        return redirect(referer)
+
+@login_required(login_url='signin')
+def comment_post(request):
+    referer = request.META.get('HTTP_REFERER')
+    if request.method == 'POST':
+        user = request.user.username
+        user_profile = Profile.objects.get(user=request.user.id)
+        userpp = user_profile.profileimg
+        post_id = request.GET.get('post_id')
+        content = request.POST['comment']
+
+        post = Post.objects.get(id=post_id)
+
+        comment = Comment.objects.create(post_id=post_id, user=user, userpp=userpp, content=content)
+        comment.save()
+        post.comments.add(comment)
+        post.save()
+        return redirect(referer)
+    else:
+        return redirect(referer)
 
 @login_required(login_url='signin')
 def profile(request, pk):
@@ -193,11 +249,39 @@ def logout(request):
 
 @login_required(login_url='login')
 def delete_post(request):
+    referer = request.META.get('HTTP_REFERER')
     post_id = request.GET.get('post_id')
     post = get_object_or_404(Post, id=post_id, user=request.user)
 
     post.delete()
-    return redirect('/')
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_comment(request):
+    referer = request.META.get('HTTP_REFERER')
+    id = request.GET.get('id')
+    comment = get_object_or_404(Comment, id=id, user=request.user)
+
+    comment.delete()
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_post_profile(request):
+    referer = request.META.get('HTTP_REFERER')
+    post_id = request.GET.get('post_id')
+    post = get_object_or_404(Post, id=post_id, user=request.user)
+
+    post.delete()
+    return redirect(referer)
+
+@login_required(login_url='login')
+def delete_comment_profile(request):
+    referer = request.META.get('HTTP_REFERER')
+    id = request.GET.get('id')
+    comment = get_object_or_404(Comment, id=id, user=request.user)
+
+    comment.delete()
+    return redirect(referer)
 
 @login_required(login_url='login')
 def search(request):
@@ -225,3 +309,8 @@ def embed_url(video_url):
         regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
 
         return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)
+
+def extract_hashtags(text):
+    hashtag_pattern = re.compile(r'\#\w+')
+    hashtags = re.findall(hashtag_pattern, text)
+    return hashtags

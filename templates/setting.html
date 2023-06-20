@@ -6,10 +6,10 @@
 <head>
     <meta charset="utf-8">
     <!-- favicon-->
-    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
-    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
-    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
-    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <link href="{% static 'apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
     <title>Account Settings - Interlude</title>
 
     <!-- Add the MDB5 CSS file -->
@@ -37,7 +37,7 @@
                 <div class="col-12 col-md-9 col-lg-7 col-xl-6 pb-5 pt-5">
                 <div class="card" style="border-radius: 15px;">
                     <div class="card-body p-5">
-                    <h2 class="text-uppercase text-center mb-5">Profile Settings for<br><b class="text-lowercase">{{user.username}}</b></h2>
+                    <h2 class="text-uppercase text-center mb-3">Profile Settings for<br><b class="text-lowercase">{{user.username}}</b></h2>
 
                     <form action="" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -62,7 +62,7 @@
                             <button type="submit" class="btn btn-dark btn-lg btn-block">Save</button>
                         </div>
 
-                        <p class="text-center text-muted mt-5 mb-0">Go to the Profile page, <a href="/profile/{{user_profile.user.username}}"
+                        <p class="text-center text-muted mt-3 mb-0">Go to the Profile page, <a href="/profile/{{user_profile.user.username}}"
                             class="fw-bold text-body"><u>here</u></a></p>
 
                     </form>

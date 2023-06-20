@@ -6,10 +6,10 @@
 <head>
     <meta charset="utf-8">
     <!-- favicon-->
-    <link href="{% static 'assets/images/apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
-    <link href="{% static 'assets/images/favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
-    <link href="{% static 'assets/images/favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
-    <link rel="manifest" href="{% static 'assets/images/site.webmanifest' %}">
+    <link href="{% static 'apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+    <link href="{% static 'favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+    <link href="{% static 'favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
     <title>Log In - Interlude</title>
 
     <!-- Add the MDB5 CSS file -->
@@ -23,6 +23,8 @@
           <div class="container-fluid">
             <a class="navbar-brand" href="/login">Interlude</a>
             <form class="d-flex">
+              <a class="btn btn-warning me-4" href="#" role="button">About</a>
+              <a class="btn btn-dark me-4" href="/explore" role="button">Feed Preview</a>
               <a class="btn btn-dark" href="/signup" role="button">Register</a>
             </form>
           </div>
@@ -37,7 +39,7 @@
               <div class="card" style="border-radius: 1rem;">
                 <div class="row g-0">
                   <div class="col-md-6 col-lg-5 d-none d-md-block">
-                    <img src="{% static 'assets/images/loginimg.jpg' %}"
+                    <img src="{% static 'loginimg.jpg' %}"
                     alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
                   </div>
                   <div class="col-md-6 col-lg-7 d-flex align-items-center">
