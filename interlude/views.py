@@ -55,15 +55,23 @@ def explore(request):
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
-        if request.POST['linkyt'] == None:
-                messages.info(request, 'Missing youtube link to song')
-                return redirect('/')
+        if 'linkyt' not in request.POST:
+            messages.info(request, 'Missing link to song')
+            return redirect('/')
         else:
             user = request.user.username
             user_profile = Profile.objects.get(user=request.user.id)
             userpp = user_profile.profileimg
             linkyt = request.POST['linkyt']
-            linkyt = embed_url(linkyt)
+            
+            if is_spotify_link(linkyt):
+                linkyt = embed_spotify_url(linkyt)
+            elif is_youtube_link(linkyt):
+                linkyt = embed_youtube_url(linkyt)
+            else:
+                messages.info(request, 'Invalid link')
+                return redirect('/')
+            
             caption = request.POST['caption']
 
             new_post = Post.objects.create(user=user, userpp=userpp, linkyt=linkyt, caption=caption)
@@ -72,6 +80,22 @@ def upload(request):
             return redirect('/')
     else:
         return redirect('/')
+
+def is_spotify_link(link):
+    return "open.spotify.com" in link
+
+def is_youtube_link(link):
+    return "youtube.com" in link or "youtu.be" in link
+
+def embed_spotify_url(spotify_url):
+    # Replace the Spotify share link with the embed link format
+    return re.sub(r'https:\/\/open\.spotify\.com\/(track|album|playlist)\/(\w+)',
+                  r'https://open.spotify.com/embed/\1/\2', spotify_url)
+
+def embed_youtube_url(youtube_url):
+    # Replace the YouTube link with the embed link format
+    regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
+    return re.sub(regex, r"https://www.youtube.com/embed/\1", youtube_url)
 
 @login_required(login_url='signin')
 def like_post(request):
@@ -311,11 +335,6 @@ def search(request):
             username_profile_list = list(chain(*username_profile_list))
         return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
     return redirect(referer)
-
-def embed_url(video_url):
-        regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
-
-        return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)
 
 def extract_hashtags(text):
     hashtag_pattern = re.compile(r'\#\w+')
