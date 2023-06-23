@@ -22,7 +22,10 @@
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
                 <div class="d-flex align-items-center">
-                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <a class="navbar-brand me-5" href="/">
+                        <img src="{% static 'INTERLUDE.png' %}" class="rounded-circle me-3" height="35" alt="profile picture" loading="lazy" />
+                        Interlude
+                    </a>
                     <form action="/search" method="POST" class="d-flex input-group w-auto">
                         {% csrf_token %}
                         <input
