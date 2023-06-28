@@ -2,6 +2,8 @@ from .models import FollowersCount, LikePost, Post, Profile, Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
@@ -222,6 +224,24 @@ def signup(request):
         password2 = request.POST['password2']
 
         if password == password2:
+            if not email:
+                messages.info(request, 'Email field is required')
+                return redirect('signup')
+
+            if not username:
+                messages.info(request, 'Username field is required')
+                return redirect('signup')
+
+            if password != password2:
+                messages.info(request, 'Passwords do not match')
+                return redirect('signup')
+
+            try:
+                validate_password(password)
+            except ValidationError as e:
+                messages.info(request, 'Password validation failed: {}'.format(', '.join(e.messages)))
+                return redirect('signup')
+
             if User.objects.filter(email=email).exists():
                 messages.info(request, 'Email already taken')
                 return redirect('signup')

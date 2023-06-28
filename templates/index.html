@@ -113,8 +113,9 @@
             <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
                 <!-- post -->
                 {% if not posts %}
-                <div class="card m-4 vh-auto col-5 p-2 d-flex">
-                    <p>you can follow people to see their posts on your feed, or put hashtags in your profile settings with music genre or artists you like to see posts with the hashtag, you also have the possiblity to search for a username if you have some friends here otherwise go check our explore page where you can see all the posts and discover more people & music !!</p>
+                <div class="card m-4 vh-auto col-5 p-2 d-flex ">
+                    <p>Hi ! You are a new user here ! Your personal feed is empty because you are not following anyone, to follow somebody, go to the searsh bar and type the "#" with the kind of music you like. You can also check the "Explore all" section to see all the post.</p>
+                    
                 </div>
                 {% else %}
                     {% for post in posts|dictsort:"created_at" reversed %}
