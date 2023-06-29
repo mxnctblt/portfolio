@@ -1,0 +1,178 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <!-- favicon-->
+        <link href="{% static 'apple-touch-icon.png' %}" rel="apple-touch-icon" sizes="180x180">
+        <link href="{% static 'favicon-32x32.png' %}" rel="icon" type="image/png" sizes="32x32">
+        <link href="{% static 'favicon-16x16.png' %}" rel="icon" type="image/png" sizes="16x16">
+        <link rel="manifest" href="{% static 'site.webmanifest' %}">
+        <title>About Us - Interlude</title>
+    
+        <!-- Add the MDB5 CSS file -->
+        <link rel="stylesheet" href="{% static 'mdb.min.css' %}">
+    </head>
+    <body>
+        <!-- header-->
+        <header>
+            <nav class="navbar navbar-light bg-light">
+                <div class="container-fluid">
+                <a class="navbar-brand" href="/signup">
+                    <img src="{% static 'INTERLUDE.png' %}" class="rounded me-3" height="35" alt="profile picture" loading="lazy" />
+                    Interlude
+                </a>
+                <form class="d-flex">
+                    <a class="btn btn-dark me-4" href="/explore" role="button">Feed Preview</a>
+                    <a class="btn btn-dark me-4" href="/signup" role="button">Register</a>
+                    <a class="btn btn-dark" href="/login" role="button">Login</a>
+                </form>
+                </div>
+            </nav>
+        </header>
+        <section class="vh-auto min-vh-100" style="background-color: #76593b;">
+            <!-- logo + slogan -->
+            <div class="bg-image mb-5">
+                <img
+                src="{% static 'aboutimg.jpg' %}"
+                class="img-fluid"
+                alt="about image"
+                />
+                <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+                    <div class="d-flex justify-content-around align-items-center h-100">
+                        <div class="d-flex justify-content-center align-items-center  flex-column">
+                            <h1 class="mb-4" style="color: wheat; font-family: cursive;">Welcome to Interlude,</h1>
+                            <h1 class="mb-4" style="color: wheat; font-family: cursive;">The new way to Interlude !</h1>
+                            <a class="btn btn-warning me-4" href="/signup" role="button">Register Now!</a>
+                        </div>
+                        <img src="{% static 'INTERLUDE.png' %}" class="rounded" height="300" alt="logo" loading="lazy" />
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- what & How ? -->
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">What is Interlude ?</h1>
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">Interlude is a web social media app where people can share and discover music with everyone thanks to a personalized feed.</h5>
+                    <p class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">↓ See how below ↓</p>
+                    <ol class="list-group list-group-light list-group-numbered pb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start p-3">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Register</div>
+                            First you have to register, otherwise you cannot access our many functionnalities !
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start p-3">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Follow</div>
+                            Then follow people with similar taste so that their posts show up on your feed !
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start p-3">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Hashtags</div>
+                            Another way to have posts show up on your post is to use "#" in the music section in setting !
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start p-3">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Scroll</div>
+                            Now that you have done everything, just scroll down your feed to make wonderful discoveries !
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            <hr>
+            <!-- the feed -->
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div>
+                    <video width="640" height="360" controls>
+                      <source src="{% static 'videoabout.mp4' %}" type="video/mp4">
+                      Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">Feed Preview</h1>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">As you can see rapidly on the left, this is what the feed looks like.</p>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">If you want to see directly without registering, no worries we got you!</p>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">We created a feed preview just for you !</p>
+                    <a class="btn btn-warning mb-2 me-4" href="/explore" role="button">Feed Preview</a>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">(note that the possibility to interact with the posts have been removed)</p>
+                </div>
+            </div>
+            <hr>
+            <!-- post about music -->
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center  flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">Share Music</h1>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">Use Interlude to make posts, share musics thanks to Youtube or Spotify links.</p>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">As you can see on the right, you can also add a caption.</p>
+                    <p class="mb-2 d-flex jutify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">Once it's posted, people can interact with your post by liking and commenting.</p>
+                </div>
+                <img src="{% static 'postabout.png' %}" class="rounded" height="500" alt="post about" loading="lazy" />
+            </div>
+            <hr>
+            <!-- custom profile -->
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">Customize your profile</h1>
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">You have the possibility to add a profile picture and a bio like any other social media.</h5>
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">We added a special element called "My musical tastes" where you can write about the genres or artists you like.</h5>
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">And here is a reminder that if you put a "#" in this section.</h5>
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">All posts containing the same "#" in their caption will automatically be added to your feed !</h5>
+                    <img src="{% static 'profileabout.png' %}" class="rounded" height="500" alt="profile about" loading="lazy" />
+                </div>
+            </div>
+            <hr>
+            <!-- us -->
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">Our team</h1>
+                    <img src="{% static 'aboutus.png' %}" height="500" alt="our team" loading="lazy" />
+                </div>
+            </div>
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h5 class="mb-3 d-flex justify-content-center align-items-center" style="color: whitesmoke; font-family: cursive;">Interlude was created as part of our end-of-year portfolio project at Holberton School Laval.</h5>
+                    <h4 class="mb-1 d-flex justify-content-center align-items-center" style="color: rgb(176, 117, 15); font-family: cursive;">"We wanted to create a place where anyone can discuss, discover and introduce  music to anyone !</h4>
+                    <h4 class="mb-3 d-flex justify-content-center align-items-center" style="color: rgb(176, 117, 15); font-family: cursive;">Building on the knowledge we had acquired in our first year, we developed Interlude."</h4>
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-around align-items-center pt-5 pb-5">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h1 class="mb-4" style="color: wheat; font-family: cursive;">Links</h1>
+                    <ul class="list-group list-group-light list-group-small">
+                        <li class="list-group-item p-2">
+                            <img src="{% static 'githublogo.png' %}" height="50" alt="github" loading="lazy" />
+                            <a href="https://github.com/mxnctblt/portfolio" target="_blank">Interlude project</a>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <img src="{% static 'githublogo.png' %}" height="50" alt="github" loading="lazy" />
+                            <a href="https://github.com/mxnctblt" target="_blank">Maxence's github</a>
+                        </li>
+                        <li class="list-group-item p-2">
+                            <img src="{% static 'githublogo.png' %}" height="50" alt="github" loading="lazy" />
+                            <a href="https://github.com/AntoineJacob" target="_blank">Antoine's github</a>
+                        </li>
+                      </ul>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <!-- Copyright -->
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+            © 2023 Copyright By Interlude
+            </div>
+        </footer>
+
+        <!-- Add the MDB5 JS files -->
+        <script src="{% static 'mdb.min.js' %}"></script>
+    </body>
+</html>

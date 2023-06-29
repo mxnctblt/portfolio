@@ -44,6 +44,12 @@ def feed(request):
 
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed,})
 
+def about(request):
+    if request.user.is_authenticated:
+        auth.logout(request)
+        return render(request, 'about.html')
+    return render(request, 'about.html')
+
 def explore(request):
     if request.user.is_authenticated:
         user_object = User.objects.get(username=request.user.username)
@@ -99,7 +105,7 @@ def embed_youtube_url(youtube_url):
     regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
     return re.sub(regex, r"https://www.youtube.com/embed/\1", youtube_url)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def like_post(request):
     referer = request.META.get('HTTP_REFERER')
     username = request.user.username
@@ -121,7 +127,7 @@ def like_post(request):
         post.save()
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def comment_post(request):
     referer = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
@@ -141,7 +147,7 @@ def comment_post(request):
     else:
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def profile(request, pk):
     user_object = User.objects.get(username=pk)
     user_profile = Profile.objects.get(user=user_object)
@@ -170,7 +176,7 @@ def profile(request, pk):
     }
     return render(request, 'profile.html', context)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def follow(request):
     if request.method == 'POST':
         follower = request.POST['follower']
@@ -217,74 +223,79 @@ def settings(request):
     return render(request, 'setting.html', {'user_profile': user_profile})
 
 def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        password2 = request.POST['password2']
-
-        if password == password2:
-            if not email:
-                messages.info(request, 'Email field is required')
-                return redirect('signup')
-
-            if not username:
-                messages.info(request, 'Username field is required')
-                return redirect('signup')
-
-            if password != password2:
-                messages.info(request, 'Passwords do not match')
-                return redirect('signup')
-
-            try:
-                validate_password(password)
-            except ValidationError as e:
-                messages.info(request, 'Password validation failed: {}'.format(', '.join(e.messages)))
-                return redirect('signup')
-
-            if User.objects.filter(email=email).exists():
-                messages.info(request, 'Email already taken')
-                return redirect('signup')
-            elif User.objects.filter(username=username).exists():
-                messages.info(request, 'Username already taken')
-                return redirect('signup')
-            else:
-                user = User.objects.create_user(username=username, email=email, password=password)
-                user.save()
-
-                #log user in and redirect to settings page
-                user_login = auth.authenticate(username=username, password=password)
-                auth.login(request, user_login)
-
-                #create a Profile object for the new user
-                user_model = User.objects.get(username=username)
-                new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
-                new_profile.save()
-                return redirect('/')
-
-        else:
-            messages.info(request, 'Password Not Matching')
-            return redirect('signup')
-
-    else:
+    if request.user.is_authenticated:
+        auth.logout(request)
         return render(request, 'signup.html')
+    else:
+        if request.method == 'POST':
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            password2 = request.POST['password2']
+
+            if password == password2:
+                if not email:
+                    messages.info(request, 'Email field is required')
+                    return redirect('signup')
+
+                if not username:
+                    messages.info(request, 'Username field is required')
+                    return redirect('signup')
+
+                if password != password2:
+                    messages.info(request, 'Passwords do not match')
+                    return redirect('signup')
+
+                try:
+                    validate_password(password)
+                except ValidationError as e:
+                    messages.info(request, 'Password validation failed: {}'.format(', '.join(e.messages)))
+                    return redirect('signup')
+
+                if User.objects.filter(email=email).exists():
+                    messages.info(request, 'Email already taken')
+                    return redirect('signup')
+                elif User.objects.filter(username=username).exists():
+                    messages.info(request, 'Username already taken')
+                    return redirect('signup')
+                else:
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    user.save()
+
+                    #log user in and redirect to settings page
+                    user_login = auth.authenticate(username=username, password=password)
+                    auth.login(request, user_login)
+
+                    #create a Profile object for the new user
+                    user_model = User.objects.get(username=username)
+                    new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
+                    new_profile.save()
+                    return redirect('/')
+            else:
+                messages.info(request, 'Password Not Matching')
+                return redirect('signup')
+        else:
+            return render(request, 'signup.html')
     
 def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            return redirect('/')
-        else:
-            messages.info(request, 'Credentials Invalid')
-            return redirect('/login')
-
-    else:
+    if request.user.is_authenticated:
+        auth.logout(request)
         return render(request, 'login.html')
+    else:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
+
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None:
+                auth.login(request, user)
+                return redirect('/')
+            else:
+                messages.info(request, 'Credentials Invalid')
+                return redirect('/login')
+        else:
+            return render(request, 'login.html')
     
 @login_required(login_url='login')
 def logout(request):
