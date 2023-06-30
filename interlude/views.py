@@ -63,31 +63,35 @@ def explore(request):
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
-        if 'linkyt' not in request.POST:
+        if 'link' not in request.POST:
             messages.info(request, 'Missing link to song')
             return redirect('/')
         else:
             user = request.user.username
             user_profile = Profile.objects.get(user=request.user.id)
             userpp = user_profile.profileimg
-            linkyt = request.POST['linkyt']
+            link = request.POST['link']
             
-            if is_spotify_link(linkyt):
-                linkyt = embed_spotify_url(linkyt)
-            elif is_youtube_link(linkyt):
-                linkyt = embed_youtube_url(linkyt)
+            if is_country_spotify_link(link):
+                link = remove_country(link)
+                link = embed_spotify_url(link)
+            elif is_spotify_link(link):
+                link = embed_spotify_url(link)
+            elif is_youtube_link(link):
+                link = embed_youtube_url(link)
             else:
                 messages.info(request, 'Invalid link')
                 return redirect('/')
             
             caption = request.POST['caption']
-
-            new_post = Post.objects.create(user=user, userpp=userpp, linkyt=linkyt, caption=caption)
+            new_post = Post.objects.create(user=user, userpp=userpp, link=link, caption=caption)
             new_post.save()
 
             return redirect('/')
-    else:
-        return redirect('/')
+    return redirect('/')
+
+def is_country_spotify_link(link):
+    return "/intl-" in link
 
 def is_spotify_link(link):
     return "open.spotify.com" in link
@@ -95,9 +99,17 @@ def is_spotify_link(link):
 def is_youtube_link(link):
     return "youtube.com" in link or "youtu.be" in link
 
+def remove_country(spotify_link):
+    country_code_start = spotify_link.find("intl-")
+    if country_code_start != -1:
+        country_code_end = spotify_link.find("/", country_code_start)
+        if country_code_end != -1:
+            spotify_link = spotify_link[:country_code_start] + spotify_link[country_code_end+1:]
+    return spotify_link
+
 def embed_spotify_url(spotify_url):
     # Replace the Spotify share link with the embed link format
-    return re.sub(r'https:\/\/open\.spotify\.com\/(track|album|playlist)\/(\w+)',
+    return re.sub(r'https:\/\/open\.spotify\.com\/(track|album|artist|playlist)\/(\w+)',
                   r'https://open.spotify.com/embed/\1/\2', spotify_url)
 
 def embed_youtube_url(youtube_url):

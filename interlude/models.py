@@ -22,7 +22,7 @@ class Post(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     user = models.CharField(max_length=100)
     userpp = models.ImageField(upload_to='profile_images', default='blank-profile-picture.png')
-    linkyt = models.TextField()
+    link = models.TextField()
     caption = models.TextField()
     created_at = models.DateTimeField(default=datetime.now)
     no_of_likes = models.IntegerField(default=0)

@@ -44,11 +44,6 @@
 
     <!-- Content-->
     <section class="vh-auto min-vh-100" style="background-color: #76593b;">
-        <div class="container-fluid p-5 pb-0">
-            <div class="card p-2">
-                <p>Here is a feed preview</p>
-            </div>
-        </div>
         <div class="container-fluid">
             <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
                 <!-- post -->
@@ -64,15 +59,15 @@
                     </div>
                     
                     <!-- post content -->
-                    {% if 'open.spotify.com' in post.linkyt %}
-                        <iframe style="border-radius:12px" src="{{post.linkyt}}"
+                    {% if 'open.spotify.com' in post.link %}
+                        <iframe style="border-radius:12px" src="{{post.link}}"
                                 width="100%" height="352" frameBorder="0" allowfullscreen=""
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy">
                         </iframe>
                     {% else %}
                         <iframe class="responsive-iframe" height="315" 
-                                src="{{post.linkyt}}" title="YouTube video player" frameborder="0"
+                                src="{{post.link}}" title="YouTube video player" frameborder="0"
                                 style="border-radius: 10px; overflow: hidden;"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
                         </iframe>

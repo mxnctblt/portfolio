@@ -72,123 +72,133 @@
 
     <!-- Content-->
     <section class="vh-auto min-vh-100" style="background-color: #76593b;">
-        <div class="container-fluid p-5 pb-0">
-            <div class="card p-2">
-                <p>Here you can see all the posts starting by the most recent</p>
+        {% if not posts %}
+            <div class="container-fluid">
+                <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
+                    <div class="card m-4 vh-auto col-5 p-2 d-flex justify-content-center align-items-center pt-4">
+                        <p>There is no post with this #, please try another spelling !</p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="container-fluid">
-            <div class="p-5 row d-flex justify-content-center align-items-center vh-auto">
-                <!-- post -->
-                {% for post in posts|dictsort:"created_at" reversed %}
-                <div class="card m-4 vh-auto col-5 p-2 d-flex">
-                    <!-- post header -->
-                    <div class="d-flex justify-content-between pb-2">
-                        <!-- post header left -->
-                        <div>
-                            <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong ms-1 me-1" height="35" alt="profile picture" loading="lazy" />
-                            <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
-                        </div>
-
-                        <!-- post header right -->
-                        {% if post.user == user.username %}
-                        <div class="btn-group dropup">
-                            <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
-                                • • •
-                            </button>
-                            <ul class="dropdown-menu">
-                              <li class="dropdown-item">
-                                <a href="delete?post_id={{post.id}}">
-                                    <button class="btn btn-outline-danger" type="submit"><h8>Delete Post</h8></button>
-                                </a> 
-                              </li>
-                            </ul>
-                          </div>
-                        {% endif %}
-                    </div>
-                    <!-- post content -->
-                    {% if 'open.spotify.com' in post.linkyt %}
-                        <iframe style="border-radius:12px" src="{{post.linkyt}}"
-                                width="100%" height="352" frameBorder="0" allowfullscreen=""
-                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                                loading="lazy">
-                        </iframe>
-                    {% else %}
-                        <iframe class="responsive-iframe" height="315" 
-                                src="{{post.linkyt}}" title="YouTube video player" frameborder="0"
-                                style="border-radius: 10px; overflow: hidden;"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-                        </iframe>
-                    {% endif %}
-                    <div class="d-flex justify-content-between pt-2">
-                        <!-- post caption -->
-                        <p class="pt-2" style="margin-bottom: 0;">
-                            <a class="link-warning ms-1" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
-                        </p>
-                        <!-- post likes -->
-                        <a href="/like-post?post_id={{post.id}}" class="d-flex align-items-center">
-                            <div class="p-1 rounded-full text-black" style="flex-direction: row;display: flex;">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="pt-2" style="margin-right: 7px;">
-                                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                                </svg>
-                                {% if post.no_of_likes == 0 %}
-                                <p class="fw-bolder pt-1" style="margin-bottom: 0;">0 like</p>
-                                {% elif post.no_of_likes == 1 %}
-                                <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} like</p>
-                                {% else %}
-                                <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} likes</p>
-                                {% endif %}
-                            </div>
-                        </a>
-                    </div>
-                    <!-- post comments -->
-                    <hr>
-                    <form action="/comment-post?post_id={{post.id}}" method="POST" class="d-flex input-group w-auto pb-1">
-                        {% csrf_token %}
-                        <input
-                            type="search"
-                            name="comment"
-                            class="form-control rounded me-2"
-                            placeholder="Leave a comment..."
-                            aria-label="Search"
-                            aria-describedby="search-addon"
-                        />
-                        <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
-                            <img src="{% static 'comment-icon.png' %}" height="20" alt="comment icon" loading="lazy" />
-                        </button>
-                    </form>
-                    {% for comment in post.comments.all|dictsort:"created_at" reversed %}
-                        <div class="d-flex justify-content-between align-items-center p-1">
+        {% else %}
+            <div class="container-fluid p-5 pb-0">
+                <div class="card p-2">
+                    <p>Here you can see all the posts starting by the most recent</p>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="p-5 row d-flex justify-content-center align-items-center vh-auto">
+                    <!-- post -->
+                    {% for post in posts|dictsort:"created_at" reversed %}
+                    <div class="card m-4 vh-auto col-5 p-2 d-flex">
+                        <!-- post header -->
+                        <div class="d-flex justify-content-between pb-2">
+                            <!-- post header left -->
                             <div>
-                                <img src="{{comment.userpp.url}}" class="rounded-circle shadow-4-strong" height="30" alt="profile picture" loading="lazy" />
-                                <a class="pt-2 pb-2" style="color: #be7200;" href="/profile/{{comment.user}}"><strong>{{comment.user}}</strong></a> {{comment.content}}
+                                <img src="{{post.userpp.url}}" class="rounded-circle shadow-4-strong ms-1 me-1" height="35" alt="profile picture" loading="lazy" />
+                                <a class="link-dark pt-2 pb-2" href="/profile/{{post.user}}"><b>@{{post.user}}</b></a>
                             </div>
-                            {% if comment.user == user.username %}
+
+                            <!-- post header right -->
+                            {% if post.user == user.username %}
                             <div class="btn-group dropup">
                                 <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
                                     • • •
                                 </button>
                                 <ul class="dropdown-menu">
-                                  <li class="dropdown-item">
-                                    <a href="delete-comment?id={{comment.id}}">
-                                        <button class="btn btn-outline-danger" type="submit"><h8>Delete Comment</h8></button>
+                                <li class="dropdown-item">
+                                    <a href="delete?post_id={{post.id}}">
+                                        <button class="btn btn-outline-danger" type="submit"><h8>Delete Post</h8></button>
                                     </a> 
-                                  </li>
+                                </li>
                                 </ul>
-                              </div>
+                            </div>
                             {% endif %}
                         </div>
-                    {% endfor %}
-                    <hr>
-                    <!-- post creation date -->
-                    <div class="d-flex justify-content-end">
-                        <p style="margin-bottom: 0px;">Posted {{ post.created_at }}</p>
-                    </div>
+                        <!-- post content -->
+                        {% if 'open.spotify.com' in post.link %}
+                            <iframe style="border-radius:12px" src="{{post.link}}"
+                                    width="100%" height="352" frameBorder="0" allowfullscreen=""
+                                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                    loading="lazy">
+                            </iframe>
+                        {% else %}
+                            <iframe class="responsive-iframe" height="315" 
+                                    src="{{post.link}}" title="YouTube video player" frameborder="0"
+                                    style="border-radius: 10px; overflow: hidden;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                            </iframe>
+                        {% endif %}
+                        <div class="d-flex justify-content-between pt-2">
+                            <!-- post caption -->
+                            <p class="pt-2" style="margin-bottom: 0;">
+                                <a class="link-warning ms-1" href="/profile/{{post.user}}"><strong>{{post.user}}</strong></a> {{post.caption}}
+                            </p>
+                            <!-- post likes -->
+                            <a href="/like-post?post_id={{post.id}}" class="d-flex align-items-center">
+                                <div class="p-1 rounded-full text-black" style="flex-direction: row;display: flex;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="pt-2" style="margin-right: 7px;">
+                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                                    </svg>
+                                    {% if post.no_of_likes == 0 %}
+                                    <p class="fw-bolder pt-1" style="margin-bottom: 0;">0 like</p>
+                                    {% elif post.no_of_likes == 1 %}
+                                    <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} like</p>
+                                    {% else %}
+                                    <p class="fw-bolder pt-1" style="margin-bottom: 0;">{{post.no_of_likes}} likes</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                        <!-- post comments -->
+                        <hr>
+                        <form action="/comment-post?post_id={{post.id}}" method="POST" class="d-flex input-group w-auto pb-1">
+                            {% csrf_token %}
+                            <input
+                                type="search"
+                                name="comment"
+                                class="form-control rounded me-2"
+                                placeholder="Leave a comment..."
+                                aria-label="Search"
+                                aria-describedby="search-addon"
+                            />
+                            <button type="submit" class="btn btn-outline-warning" data-mdb-ripple-color="dark">
+                                <img src="{% static 'comment-icon.png' %}" height="20" alt="comment icon" loading="lazy" />
+                            </button>
+                        </form>
+                        {% for comment in post.comments.all|dictsort:"created_at" reversed %}
+                            <div class="d-flex justify-content-between align-items-center p-1">
+                                <div>
+                                    <img src="{{comment.userpp.url}}" class="rounded-circle shadow-4-strong" height="30" alt="profile picture" loading="lazy" />
+                                    <a class="pt-2 pb-2" style="color: #be7200;" href="/profile/{{comment.user}}"><strong>{{comment.user}}</strong></a> {{comment.content}}
+                                </div>
+                                {% if comment.user == user.username %}
+                                <div class="btn-group dropup">
+                                    <button type="button" class="btn btn-light" data-mdb-toggle="dropdown" aria-expanded="false">
+                                        • • •
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                    <li class="dropdown-item">
+                                        <a href="delete-comment?id={{comment.id}}">
+                                            <button class="btn btn-outline-danger" type="submit"><h8>Delete Comment</h8></button>
+                                        </a> 
+                                    </li>
+                                    </ul>
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <hr>
+                        <!-- post creation date -->
+                        <div class="d-flex justify-content-end">
+                            <p style="margin-bottom: 0px;">Posted {{ post.created_at }}</p>
+                        </div>
 
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
+        {% endif %}
     </section>
 
     <!-- Footer -->
