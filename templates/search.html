@@ -26,12 +26,15 @@
                 
                 <!-- Left element -->
                 <div class="d-flex align-items-center">
-                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <a class="navbar-brand me-5" href="/">
+                        <img src="{% static 'INTERLUDE.png' %}" class="rounded me-3" height="35" alt="profile picture" loading="lazy" />
+                        Interlude
+                    </a>
                     <form action="/search" method="POST" class="d-flex input-group w-auto">
                         {% csrf_token %}
                         <input
                             type="search"
-                            name="username"
+                            name="query"
                             class="form-control rounded me-2"
                             placeholder="Search for username..."
                             aria-label="Search"
@@ -71,27 +74,33 @@
     <section class="vh-auto min-vh-100" style="background-color: #76593b;">
         <div class="container-fluid">
             <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
-                {% for users in username_profile_list %}
-                <a href="/profile/{{users.user}}" class="mb-4">
-                    <div class="card p-2">
-                        <div class="row d-flex">
-                            <div class="col-3">
-                                <img class="img-fluid rounded" style="width: 200px; height: 200px;" src="{{users.profileimg.url}}" alt="profileimg">
-                            </div>
-                            <div class="col-4 me-4" style="color: black;">
-                                <h2 class="pt-2"><b>@{{users.user}}</b></h2>
-                                <hr>
-                                <p>{{users.bio}}</p>
-                            </div>
-                            <div class="col-4 pt-4" style="color: black;">
-                                <h5>♫ My musical tastes ♫</h5>
-                                <hr>
-                                <p>-- {{users.music}} --</p>
+                {% if not username_profile_list %}
+                <div class="card m-4 vh-auto col-5 p-2 d-flex justify-content-center align-items-center pt-4">
+                    <p>There is no user with this username please try another spelling</p>
+                </div>
+                {% else %}
+                    {% for users in username_profile_list %}
+                    <a href="/profile/{{users.user}}" class="mb-4">
+                        <div class="card p-2">
+                            <div class="row d-flex">
+                                <div class="col-3">
+                                    <img class="img-fluid rounded" style="width: 200px; height: 200px;" src="{{users.profileimg.url}}" alt="profileimg">
+                                </div>
+                                <div class="col-4 me-4" style="color: black;">
+                                    <h2 class="pt-2"><b>@{{users.user}}</b></h2>
+                                    <hr>
+                                    <p>{{users.bio}}</p>
+                                </div>
+                                <div class="col-4 pt-4" style="color: black;">
+                                    <h5>♫ My musical tastes ♫</h5>
+                                    <hr>
+                                    <p>-- {{users.music}} --</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-                {% endfor %}
+                    </a>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
     </section>

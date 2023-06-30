@@ -26,12 +26,15 @@
                 
                 <!-- Left elements -->
                 <div class="d-flex align-items-center">
-                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <a class="navbar-brand" href="/explore">
+                        <img src="{% static 'INTERLUDE.png' %}" class="rounded me-3" height="35" alt="profile picture" loading="lazy" />
+                        Interlude
+                    </a>
                 </div>
             
                 <!-- Right elements -->
                 <div class="d-flex align-items-center">
-                    <a class="btn btn-warning me-4" href="#" role="button">About</a>
+                    <a class="btn btn-warning me-4" href="/about" role="button">About</a>
                     <a class="btn btn-dark me-4" href="/login" role="button">Log In</a>
                     <a class="btn btn-dark" href="/signup" role="button">Register</a>
                 </div>
@@ -41,11 +44,6 @@
 
     <!-- Content-->
     <section class="vh-auto min-vh-100" style="background-color: #76593b;">
-        <div class="container-fluid p-5 pb-0">
-            <div class="card p-2">
-                <p>Here is a feed preview</p>
-            </div>
-        </div>
         <div class="container-fluid">
             <div class="p-5 row d-flex justify-content-center align-items-center vh-auto flex-column">
                 <!-- post -->
@@ -61,11 +59,19 @@
                     </div>
                     
                     <!-- post content -->
-                    <iframe class="responsive-iframe" height="315" 
-                            src="{{post.linkyt}}" title="YouTube video player" frameborder="0"
-                            style="border-radius: 10px; overflow: hidden;"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-                    </iframe>
+                    {% if 'open.spotify.com' in post.link %}
+                        <iframe style="border-radius:12px" src="{{post.link}}"
+                                width="100%" height="352" frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy">
+                        </iframe>
+                    {% else %}
+                        <iframe class="responsive-iframe" height="315" 
+                                src="{{post.link}}" title="YouTube video player" frameborder="0"
+                                style="border-radius: 10px; overflow: hidden;"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                        </iframe>
+                    {% endif %}
                     <div class="d-flex justify-content-between pt-2">
                         <!-- post caption -->
                         <p class="pt-2" style="margin-bottom: 0;">

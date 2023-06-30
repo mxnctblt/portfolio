@@ -26,14 +26,17 @@
                 
                 <!-- Left element -->
                 <div class="d-flex align-items-center">
-                    <a class="navbar-brand me-5" href="/">Interlude</a>
+                    <a class="navbar-brand me-5" href="/">
+                        <img src="{% static 'INTERLUDE.png' %}" class="rounded me-3" height="35" alt="profile picture" loading="lazy" />
+                        Interlude
+                    </a>
                     <form action="/search" method="POST" class="d-flex input-group w-auto">
                         {% csrf_token %}
                         <input
                             type="search"
-                            name="username"
+                            name="query"
                             class="form-control rounded me-2"
-                            placeholder="Search for username..."
+                            placeholder="Search # or username..."
                             aria-label="Search"
                             aria-describedby="search-addon"
                         />
@@ -104,11 +107,19 @@
                         {% endif %}
                     </div>
                     <!-- post content -->
-                    <iframe class="responsive-iframe" height="315" 
-                            src="{{post.linkyt}}" title="YouTube video player" frameborder="0"
-                            style="border-radius: 10px; overflow: hidden;"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-                    </iframe>
+                    {% if 'open.spotify.com' in post.link %}
+                        <iframe style="border-radius:12px" src="{{post.link}}"
+                                width="100%" height="352" frameBorder="0" allowfullscreen=""
+                                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                                loading="lazy">
+                        </iframe>
+                    {% else %}
+                        <iframe class="responsive-iframe" height="315" 
+                                src="{{post.link}}" title="YouTube video player" frameborder="0"
+                                style="border-radius: 10px; overflow: hidden;"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                        </iframe>
+                    {% endif %}
                     <div class="d-flex justify-content-between pt-2">
                         <!-- post caption -->
                         <p class="pt-2" style="margin-bottom: 0;">

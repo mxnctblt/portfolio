@@ -21,9 +21,12 @@
     <header>
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-              <a class="navbar-brand" href="/signup">Interlude</a>
+              <a class="navbar-brand" href="/signup">
+                <img src="{% static 'INTERLUDE.png' %}" class="rounded me-3" height="35" alt="profile picture" loading="lazy" />
+                Interlude
+              </a>
               <form class="d-flex">
-                <a class="btn btn-warning me-4" href="#" role="button">About</a>
+                <a class="btn btn-warning me-4" href="/about" role="button">About</a>
                 <a class="btn btn-dark me-4" href="/explore" role="button">Feed Preview</a>
                 <a class="btn btn-dark" href="/login" role="button">Login</a>
               </form>

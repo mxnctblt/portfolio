@@ -2,6 +2,8 @@ from .models import FollowersCount, LikePost, Post, Profile, Comment
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, auth
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from itertools import chain
@@ -42,6 +44,12 @@ def feed(request):
 
     return render(request, 'index.html', {'user_profile': user_profile, 'posts': feed,})
 
+def about(request):
+    if request.user.is_authenticated:
+        auth.logout(request)
+        return render(request, 'about.html')
+    return render(request, 'about.html')
+
 def explore(request):
     if request.user.is_authenticated:
         user_object = User.objects.get(username=request.user.username)
@@ -55,25 +63,61 @@ def explore(request):
 @login_required(login_url='login')
 def upload(request):
     if request.method == 'POST':
-        if request.POST['linkyt'] == None:
-                messages.info(request, 'Missing youtube link to song')
-                return redirect('/')
+        if 'link' not in request.POST:
+            messages.info(request, 'Missing link to song')
+            return redirect('/')
         else:
             user = request.user.username
             user_profile = Profile.objects.get(user=request.user.id)
             userpp = user_profile.profileimg
-            linkyt = request.POST['linkyt']
-            linkyt = embed_url(linkyt)
+            link = request.POST['link']
+            
+            if is_country_spotify_link(link):
+                link = remove_country(link)
+                link = embed_spotify_url(link)
+            elif is_spotify_link(link):
+                link = embed_spotify_url(link)
+            elif is_youtube_link(link):
+                link = embed_youtube_url(link)
+            else:
+                messages.info(request, 'Invalid link')
+                return redirect('/')
+            
             caption = request.POST['caption']
-
-            new_post = Post.objects.create(user=user, userpp=userpp, linkyt=linkyt, caption=caption)
+            new_post = Post.objects.create(user=user, userpp=userpp, link=link, caption=caption)
             new_post.save()
 
             return redirect('/')
-    else:
-        return redirect('/')
+    return redirect('/')
 
-@login_required(login_url='signin')
+def is_country_spotify_link(link):
+    return "/intl-" in link
+
+def is_spotify_link(link):
+    return "open.spotify.com" in link
+
+def is_youtube_link(link):
+    return "youtube.com" in link or "youtu.be" in link
+
+def remove_country(spotify_link):
+    country_code_start = spotify_link.find("intl-")
+    if country_code_start != -1:
+        country_code_end = spotify_link.find("/", country_code_start)
+        if country_code_end != -1:
+            spotify_link = spotify_link[:country_code_start] + spotify_link[country_code_end+1:]
+    return spotify_link
+
+def embed_spotify_url(spotify_url):
+    # Replace the Spotify share link with the embed link format
+    return re.sub(r'https:\/\/open\.spotify\.com\/(track|album|artist|playlist)\/(\w+)',
+                  r'https://open.spotify.com/embed/\1/\2', spotify_url)
+
+def embed_youtube_url(youtube_url):
+    # Replace the YouTube link with the embed link format
+    regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
+    return re.sub(regex, r"https://www.youtube.com/embed/\1", youtube_url)
+
+@login_required(login_url='login')
 def like_post(request):
     referer = request.META.get('HTTP_REFERER')
     username = request.user.username
@@ -95,7 +139,7 @@ def like_post(request):
         post.save()
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def comment_post(request):
     referer = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
@@ -115,7 +159,7 @@ def comment_post(request):
     else:
         return redirect(referer)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def profile(request, pk):
     user_object = User.objects.get(username=pk)
     user_profile = Profile.objects.get(user=user_object)
@@ -144,7 +188,7 @@ def profile(request, pk):
     }
     return render(request, 'profile.html', context)
 
-@login_required(login_url='signin')
+@login_required(login_url='login')
 def follow(request):
     if request.method == 'POST':
         follower = request.POST['follower']
@@ -191,56 +235,79 @@ def settings(request):
     return render(request, 'setting.html', {'user_profile': user_profile})
 
 def signup(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        password2 = request.POST['password2']
-
-        if password == password2:
-            if User.objects.filter(email=email).exists():
-                messages.info(request, 'Email already taken')
-                return redirect('signup')
-            elif User.objects.filter(username=username).exists():
-                messages.info(request, 'Username already taken')
-                return redirect('signup')
-            else:
-                user = User.objects.create_user(username=username, email=email, password=password)
-                user.save()
-
-                #log user in and redirect to settings page
-                user_login = auth.authenticate(username=username, password=password)
-                auth.login(request, user_login)
-
-                #create a Profile object for the new user
-                user_model = User.objects.get(username=username)
-                new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
-                new_profile.save()
-                return redirect('/')
-
-        else:
-            messages.info(request, 'Password Not Matching')
-            return redirect('signup')
-
-    else:
+    if request.user.is_authenticated:
+        auth.logout(request)
         return render(request, 'signup.html')
+    else:
+        if request.method == 'POST':
+            username = request.POST['username']
+            email = request.POST['email']
+            password = request.POST['password']
+            password2 = request.POST['password2']
+
+            if password == password2:
+                if not email:
+                    messages.info(request, 'Email field is required')
+                    return redirect('signup')
+
+                if not username:
+                    messages.info(request, 'Username field is required')
+                    return redirect('signup')
+
+                if password != password2:
+                    messages.info(request, 'Passwords do not match')
+                    return redirect('signup')
+
+                try:
+                    validate_password(password)
+                except ValidationError as e:
+                    messages.info(request, 'Password validation failed: {}'.format(', '.join(e.messages)))
+                    return redirect('signup')
+
+                if User.objects.filter(email=email).exists():
+                    messages.info(request, 'Email already taken')
+                    return redirect('signup')
+                elif User.objects.filter(username=username).exists():
+                    messages.info(request, 'Username already taken')
+                    return redirect('signup')
+                else:
+                    user = User.objects.create_user(username=username, email=email, password=password)
+                    user.save()
+
+                    #log user in and redirect to settings page
+                    user_login = auth.authenticate(username=username, password=password)
+                    auth.login(request, user_login)
+
+                    #create a Profile object for the new user
+                    user_model = User.objects.get(username=username)
+                    new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
+                    new_profile.save()
+                    return redirect('/')
+            else:
+                messages.info(request, 'Password Not Matching')
+                return redirect('signup')
+        else:
+            return render(request, 'signup.html')
     
 def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            auth.login(request, user)
-            return redirect('/')
-        else:
-            messages.info(request, 'Credentials Invalid')
-            return redirect('/login')
-
-    else:
+    if request.user.is_authenticated:
+        auth.logout(request)
         return render(request, 'login.html')
+    else:
+        if request.method == 'POST':
+            username = request.POST['username']
+            password = request.POST['password']
+
+            user = auth.authenticate(username=username, password=password)
+
+            if user is not None:
+                auth.login(request, user)
+                return redirect('/')
+            else:
+                messages.info(request, 'Credentials Invalid')
+                return redirect('/login')
+        else:
+            return render(request, 'login.html')
     
 @login_required(login_url='login')
 def logout(request):
@@ -285,30 +352,32 @@ def delete_comment_profile(request):
 
 @login_required(login_url='login')
 def search(request):
+    referer = request.META.get('HTTP_REFERER')
     user_object = User.objects.get(username=request.user.username)
     user_profile = Profile.objects.get(user=user_object)
 
     if request.method == 'POST':
-        username = request.POST['username']
-        username_object = User.objects.filter(username__icontains=username)
+        query = request.POST['query']
 
-        username_profile = []
-        username_profile_list = []
+        if query.startswith('#'):
+            posts = Post.objects.filter(caption__icontains=query)
+            return render(request, 'hashtag_search.html', {'user_profile': user_profile, 'posts': posts, 'hashtag': query})
+        else:
+            username_object = User.objects.filter(username__icontains=query)
 
-        for users in username_object:
-            username_profile.append(users.id)
+            username_profile = []
+            username_profile_list = []
 
-        for ids in username_profile:
-            profile_lists = Profile.objects.filter(id_user=ids)
-            username_profile_list.append(profile_lists)
-        
-        username_profile_list = list(chain(*username_profile_list))
-    return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+            for users in username_object:
+                username_profile.append(users.id)
 
-def embed_url(video_url):
-        regex = r"(?:https:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)"
-
-        return re.sub(regex, r"https://www.youtube.com/embed/\1",video_url)
+            for ids in username_profile:
+                profile_lists = Profile.objects.filter(id_user=ids)
+                username_profile_list.append(profile_lists)
+            
+            username_profile_list = list(chain(*username_profile_list))
+        return render(request, 'search.html', {'user_profile': user_profile, 'username_profile_list': username_profile_list})
+    return redirect(referer)
 
 def extract_hashtags(text):
     hashtag_pattern = re.compile(r'\#\w+')
