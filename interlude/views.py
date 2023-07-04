@@ -132,12 +132,11 @@ def like_post(request):
         new_like.save()
         post.no_of_likes = post.no_of_likes+1
         post.save()
-        return redirect(referer)
     else:
         like_filter.delete()
         post.no_of_likes = post.no_of_likes-1
         post.save()
-        return redirect(referer)
+    return redirect(referer)
 
 @login_required(login_url='login')
 def comment_post(request):
