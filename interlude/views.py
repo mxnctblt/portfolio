@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
-from functions import extract_hashtags, is_country_spotify_link, is_spotify_link, is_youtube_link, remove_country, embed_spotify_url, embed_youtube_url
+from .functions import extract_hashtags, is_country_spotify_link, is_spotify_link, is_youtube_link, remove_country, embed_spotify_url, embed_youtube_url
 from itertools import chain
 import re
 
