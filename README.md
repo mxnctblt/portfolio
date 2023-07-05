@@ -31,7 +31,7 @@ Interlude is a web social media app focusing on music, providing with a new way 
 
 ## Key Features
 <div align="center">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/TfX71LlmUH4" title="YouTube video player" style="border-radius: 10px;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <a href="https://www.youtube.com/watch?v=TfX71LlmUH4"></a>
 </div>
 
 ## Installation
@@ -90,6 +90,7 @@ Quit the server with CTRL-BREAK.
 Now that the server is running go to our website url that you just installed locally.
 
 URL: http://127.0.0.1:8000/
+
 Landing Page: http://127.0.0.1:8000/about
 
 ## Contributing
@@ -103,6 +104,7 @@ This web application uses the following open source packages:
 ## Related
 > Author's Github links :
 >> Antoine Jacob [@AntoineJacob](https://github.com/AntoineJacob)
+>> 
 >> Maxence Thibault [@mxnctblt](https://github.com/mxnctblt)
 
 ## License
