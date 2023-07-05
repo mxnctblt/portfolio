@@ -29,11 +29,7 @@ We played with the words and used it as a metaphore. Meaning, as everyone has al
 Interlude is a web social media app focusing on music, providing with a new way to pass the time. It is a place where anyone can discuss, discover & also introduce music to anyone. It's aimed at anyone who loves music - in other words, everyone!
 
 ## Key Features
-<div align="center">
-  <div style="border-radius: 8px; overflow: hidden;">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/TfX71LlmUH4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
-</div>
+[Video Explication](https://www.youtube.com/watch?v=TfX71LlmUH4)
 
 ## Installation
 
