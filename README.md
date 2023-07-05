@@ -16,7 +16,6 @@
 
 <div class="bg-image mb-5">
     <img src="./static/readmeimg.png" class="img-fluid" alt="about image" />
-    </div>
 </div>
 
 ## Introduction
@@ -31,7 +30,9 @@ Interlude is a web social media app focusing on music, providing with a new way 
 
 ## Key Features
 <div align="center">
-    <a href="https://www.youtube.com/watch?v=TfX71LlmUH4"></a>
+  <div style="border-radius: 8px; overflow: hidden;">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/TfX71LlmUH4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
 </div>
 
 ## Installation
